@@ -1,113 +1,287 @@
-import Image from "next/image";
+"use client"
+
+// chestii de reparat: stergere pasi, copy to clipboard properly, add detalii
+
+import {useState} from 'react'
+import { formData } from '@/types/types';
+import Link from 'next/link'
+
+import { useCopyToClipboard } from '@/hooks/useCopyToClipboard'
 
 export default function Home() {
+
+  const [copiedText, copy] = useCopyToClipboard()
+
+  const handleCopy = (text: string) => () => {
+    copy(text)
+      .then(() => {
+        setCopyStatus('Text Copiat!')
+      })
+      .catch(error => {
+        setCopyStatus('Textul nu a putut fi copiat.')
+      })
+  }
+  
+  const [pasiEnumerati, setPasiEnumerati] = useState<string[]>([])
+  const [formData, setFormData] = useState<formData>({
+    titlu_lucrare: "",
+    muncitori: 0,
+    randuri: 10,
+    pasi: [],
+    detalii: ""
+  });
+  
+  const [existPasi, setExistPasi] = useState<boolean>(false)
+  const [pasInput, setPasInput] = useState<string>('')
+  const [finalDraft, setFinalDraft] = useState<string>('')
+  const [copyStatus, setCopyStatus] = useState<string>('');
+
+  const handleInputChange = (e: any) => {
+    setPasInput(e.target.value);
+  }
+
+  const stergePas = (elem: any) => {
+    for (let i = 0; i < pasiEnumerati.length; i++) {
+      if(i === elem) {
+        setPasiEnumerati(prevPasi => prevPasi.filter((pas, index) => index !== elem))
+      }
+    }
+  }
+
+  const updateForm = (e: any) => {
+    setFormData((prevState) => ({
+      ...prevState,
+      [e.target.name]: e.target.value
+    }));
+  }
+
+  const handleSubmit = (e: any) => {
+    e.preventDefault()
+    if(existPasi === true) {
+      setFinalDraft(`
+        Prefa-te ca ai rolul unui inginer in constructii si sef de santier, lucrand in cadrul unei firme renumite constructii, 
+        iar impreuna cu echipa ta formata din ${formData.muncitori} muncitori ai realizat o lucrare cu urmatorul nume: ${formData.titlu_lucrare}.  
+        Pentru realizarea acestiei lucarii ai urmatorit urmatorii pasi: ${pasiEnumerati}, 
+        Creeaza un text de maxim ${formData.randuri} randuri care descrie intregul proces al acestei lucrari pas cu pas, devzolvatat 
+        cu terminologia apropriata domeniului constructii, nu include faptul ca esti inginer, nu include faptul ca lucrezi in cadrul 
+        unei firme. ${formData.detalii.length !== 0 ? `Te rog sa adaugi ca ${formData.detalii}` : ''}
+    `)
+    }
+    else if(existPasi === false) {
+      setFinalDraft(`
+      Prefa-te ca ai rolul unui inginer in constructii si sef de santier, lucrand in cadrul unei firme renumite constructii, iar impreuna 
+      cu echipa ta formata din ${formData.muncitori} ai realizat o lucrare cu urmatorul nume: ${formData.titlu_lucrare}.  Pentru realizarea acestei 
+      lucrari s-au urmarit anumiti pasi, foloseste-ti cunostintele de inginer si afiseaza in ordine cronologica pasii realizarii lucrarii.
+      Creeaza un text de maxim ${formData.randuri} randuri care descrie intregul proces al acestei lucrari pas cu pas, devzolvatat cu terminologia apropriata
+      domeniului constructii, nu include faptul ca esti inginer, nu include faptul ca lucrezi in cadrul unei firme. 
+      ${formData.detalii.length !== 0 ? `Te rog sa adaugi ca ${formData.detalii}` : ''}
+  `)
+  }
+  }
+
+  const handleAddItem = (e: any) => {
+    if (pasInput.trim() !== '') {
+      setPasiEnumerati((prevItems) => [...prevItems, pasInput]);
+
+      setFormData((prevState) => ({
+        ...prevState,
+        pasi: pasiEnumerati
+      }));
+
+      setPasInput(''); // Clear the input field after adding the item
+    }
+};
+
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
-        <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-          Get started by editing&nbsp;
-          <code className="font-mono font-bold">app/page.tsx</code>
-        </p>
-        <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:h-auto lg:w-auto lg:bg-none">
-          <a
-            className="pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className="dark:invert"
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
+    <main className="flex min-h-screen items-center justify-center flex-col font-[Poppins]">
+        <div className = "flex 2xl:w-3/4 w-full flex-col p-10 rounded-lg shadow-md">
+          <div className="flex w-full justify-between items-center">
+            <div className = "flex flex-col">
+              <h1 className = "font-bold font-[Poppins] 2xl:text-xl text-sm">Generator Descrieri Lucrari</h1>
+              <h1 className = "font-regular font-[Poppins] text-sm text-gray-500">Creat de Neague Eduard</h1>
+            </div>
+              <img
+                src = "/DAMINA_LOGO.png"
+                alt = "damina logo"
+                className = "select-none h-8 w-20"
+                draggable = {false}
+              />
+          </div>
+
+          <hr className = "w-full border-gray-500 mt-4"/>
+          
+          <div className = "w-full gap-10 flex 2xl:flex-row flex-col">
+
+            <div className = "flex flex-col 2xl:w-1/2 w-full h-full mt-[2rem]">
+            <form onSubmit = {handleSubmit}>
+
+              <div>
+                <label 
+                  htmlFor = "titlu_lucrare"
+                  className = "text-gray-500 mb-2 font-bold font-[Poppins]"
+                >
+                  Titlu Lucrare
+                </label>
+                <input 
+                  id = "titlu_lucrare"
+                  type = "text" 
+                  name = "titlu_lucrare"
+                  onChange = {(e: any) => updateForm(e)}
+                  placeholder = "Title Lucrare"
+                  className = "rounded-sm bg-gray-100 focus:outline-green-600 p-2 w-full "
+                />
+              </div>
+
+              <div className = "mt-4">
+                <label 
+                  htmlFor = "muncitori"
+                  className = "text-gray-500 mb-2 font-bold font-[Poppins]"
+                >
+                  Numar Muncitori
+                </label>
+                <input 
+                  id = "muncitori"
+                  type = "number" 
+                  name = "muncitori"
+                  onChange = {(e: any) => updateForm(e)}
+                  placeholder = "Numar Muncitori"
+                  className = "rounded-sm bg-gray-100 focus:outline-green-600 p-2 w-full "
+                />
+              </div>
+
+              <div className = "mt-4">
+                <label 
+                  htmlFor = "randuri"
+                  className = "text-gray-500 mb-2 font-bold font-[Poppins]"
+                >
+                  Randuri
+                </label>
+                <input 
+                  id = "randuri"
+                  type = "number" 
+                  name = "randuri"
+                  onChange = {(e: any) => updateForm(e)}
+                  placeholder = "Randuri (Recomandat 10)"
+                  className = "rounded-sm bg-gray-100 focus:outline-green-600 p-2 w-full "
+                />
+              </div>
+
+              <div className = "mt-4">
+                <label 
+                  htmlFor = "detalii"
+                  className = "text-gray-500 mb-2 font-bold font-[Poppins]"
+                >
+                  Detalii
+                </label>
+                <textarea 
+                  id = "detalii"
+                  name = "detalii"
+                  onChange = {(e: any) => updateForm(e)}
+                  placeholder = "Detalii"
+                  className = "rounded-sm bg-gray-100 focus:outline-green-600 pl-2 pt-2 w-full h-[10rem]"
+                />
+              </div>
+
+              <div className = "mt-4">
+                <label 
+                  htmlFor = "pasi"
+                  className = "text-gray-500 mb-2 font-bold font-[Poppins]"
+                >
+                  Pasi
+                </label>
+                <input 
+                  id = "pasi"
+                  type = "checkbox" 
+                  name = "pasi"
+                  onChange = {() => {setExistPasi(prevPasi => !prevPasi), setPasiEnumerati([])}}
+                  placeholder = "pasi"
+                  className = " w-[20px] bg-green-800 "
+                />
+              </div>
+              {existPasi === false ? (
+                <div>
+                  
+                </div>
+              ) 
+              :
+              (
+                
+                <div className = "mt-4 flex w-full 2xl:flex-row flex-col items-end 2xl:gap-6 gap-4">
+                  <div className = "flex flex-col 2xl:w-[80%] w-full">
+                    <label 
+                      htmlFor = "pas"
+                      className = "text-gray-500 mb-2 font-bold font-[Poppins]"
+                    >
+                      Adauga Pas
+                    </label>
+                    <input 
+                      id = "pas"
+                      type = "pas" 
+                      name = "pas"
+                      value = {pasInput}
+                      onChange = {(e: any) => handleInputChange(e)}
+                      onKeyDown={(e) => { 
+                        if (e.key === "Enter") { 
+                            handleAddItem(e)
+                        } 
+                      }} 
+                      placeholder = "Adauga Pas"
+                      className = "rounded-sm bg-gray-100 focus:outline-green-600 p-2 w-full"
+                    />
+                  </div>
+               
+                    <button 
+                    type = "button" 
+                    disabled = {pasInput.length === 0 ? true : false}
+                    className = "bg-gray-300 hover:bg-green-800 disabled:bg-gray-500 disabled:hover:text-black 2xl:w-[20%] w-full p-2 rounded-lg transition-all hover:text-white duration-100" 
+                    onClick = {(e) => handleAddItem(e)}
+                  >
+                    Adauga Pas
+                  </button>
+                  
+                </div>
+               
+               
+              )}
+            </form>
+          </div>
+
+          <div className = "2xl:w-1/2 w-full h-full mt-[2rem] flex flex-col">
+            <div className = "flex flex-col">
+                  <h1 className = "font-bold text-gray-500">Pasi Enumarati</h1>
+                  <div className = "flex flex-col gap-3 max-h-[15rem] overflow-y-scroll w-full bg-gray-100 p-2 rounded-sm">
+                    {pasiEnumerati.length == 0 ? 'Nu exista pasi.' : ''}
+                    {pasiEnumerati.map((pas, i) => (
+                      <div key = {i} className = "flex justify-between">
+                          <p>{i+1}. {pas}</p>
+                          <button 
+                            className = "bg-gray-600 hover:bg-rose-700 duration-100 text-white rounded-lg p-1"
+                            onClick = {() => stergePas(i)}
+                          >
+                            Sterge
+                          </button>
+                      </div>
+                    ))}
+
+                  </div>
+                </div>
+
+                <div className = "rezultat flex flex-col gap-2 mt-4">
+                  <h1 className = "text-gray-500 font-bold">Rezultat</h1>
+                  <p>{ finalDraft }</p>
+                  <button type = "submit" className = "bg-gray-300 mt-4 p-2 hover:bg-green-800 text-black duration-100 hover:text-white rounded-xl" onClick = {handleSubmit}>
+                      Submit
+                  </button>
+                  <Link onClick = {handleCopy(finalDraft)} href = "https://chat.openai.com/" target= "_blank" className = "bg-gray-300 mt-4 flex justify-center items-center hover:bg-green-800 w-full p-2 rounded-lg transition-all hover:text-white duration-100">
+                      Copy + ChatGPT
+                  </Link>
+                  {copyStatus}
+                </div>
+          </div>
+
+          </div>
+         
         </div>
-      </div>
-
-      <div className="relative flex place-items-center before:absolute before:h-[300px] before:w-full sm:before:w-[480px] before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-full sm:after:w-[240px] after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 before:lg:h-[360px] z-[-1]">
-        <Image
-          className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className="mb-32 grid text-center lg:max-w-5xl lg:w-full lg:mb-0 lg:grid-cols-4 lg:text-left">
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Docs{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Learn{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Learn about Next.js in an interactive course with&nbsp;quizzes!
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Templates{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Explore starter templates for Next.js.
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Deploy{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50 text-balance`}>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
     </main>
   );
 }

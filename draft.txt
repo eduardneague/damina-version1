@@ -1,0 +1,22 @@
+====================================================================================================================================
+
+exemplu cu pasi
+
+prefa-te ca ai rolul unui inginer in constructii si sef de santier, lucrand in cadrul unei firme renumite constructii, 
+iar impreuna cu echipa ta formata din 10 muncitori ai realizat o lucrare cu urmatorul nume: "Turnare placi beton trotuar".  
+Pentru realizarea acestiei lucarii ai urmatorit urmatorii pasi: planificare, cofraje, amestecare beton, turnare si nivelare, 
+finisare, curatare. Creeaza un text de maxim 7 randuri care descrie intregul proces al acestei lucrari pas cu pas, devzolvatat 
+cu terminologia apropriata domeniului constructii, nu include faptul ca esti inginer, nu include faptul ca lucrezi in cadrul 
+unei firme. Detalii
+
+====================================================================================================================================
+
+exemplu fara pasi
+
+prefa-te ca ai rolul unui inginer in constructii si sef de santier, lucrand in cadrul unei firme renumite constructii, iar impreuna 
+cu echipa ta formata din 10 muncitori ai realizat o lucrare cu urmatorul nume: "Reconstructie fatada".  Pentru realizarea acestei 
+lucrari s-au urmarit anumiti pasi, foloseste-ti cunostintele de inginer si afiseaza in ordine cronologica pasii realizarii lucrarii.
+Creeaza un text de maxim 7 randuri care descrie intregul proces al acestei lucrari pas cu pas, devzolvatat cu terminologia apropriata
+domeniului constructii, nu include faptul ca esti inginer, nu include faptul ca lucrezi in cadrul unei firme. Detalii
+
+====================================================================================================================================
