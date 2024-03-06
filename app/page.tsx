@@ -2,9 +2,12 @@
 
 // chestii de reparat: stergere pasi, copy to clipboard properly, add detalii
 
-import {useState} from 'react'
+import {useState, useEffect} from 'react'
 import { formData } from '@/types/types';
 import Link from 'next/link'
+import axios from 'axios'
+import LoadingAnimation from '@/components/LoadingAnimation';
+import { HiClipboardCopy } from "react-icons/hi";
 
 import { useCopyToClipboard } from '@/hooks/useCopyToClipboard'
 
@@ -16,9 +19,15 @@ export default function Home() {
     copy(text)
       .then(() => {
         setCopyStatus('Text Copiat!')
+        setTimeout(() => {
+          setCopyStatus('')
+        }, 2000)
       })
-      .catch(error => {
+      .catch((error: any) => {
         setCopyStatus('Textul nu a putut fi copiat.')
+        setTimeout(() => {
+          setCopyStatus('')
+        }, 2000)
       })
   }
   
@@ -35,9 +44,24 @@ export default function Home() {
   const [pasInput, setPasInput] = useState<string>('')
   const [finalDraft, setFinalDraft] = useState<string>('')
   const [copyStatus, setCopyStatus] = useState<string>('');
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [descriere, setDescriere] = useState<string>('')
+  const [readyToRequest, setReadyToRequest] = useState<boolean>(false)
+
+  useEffect(() => {
+    handleValidation()
+  }, [formData])
+
 
   const handleInputChange = (e: any) => {
     setPasInput(e.target.value);
+  }
+
+  const handleValidation = () => {
+    if(formData.titlu_lucrare.length > 0 && (formData.randuri != 0  || formData.randuri != null) && formData.muncitori > 0){
+      setReadyToRequest(true)
+    }
+    else setReadyToRequest(false)
   }
 
   const stergePas = (elem: any) => {
@@ -55,27 +79,88 @@ export default function Home() {
     }));
   }
 
+  const sendMessage = (message: string) => {
+    const url = 'https://api.openai.com/v1/chat/completions'
+    const headers = {
+      'Content-type': 'application/json',
+      'Authorization': `Bearer ${process.env.NEXT_PUBLIC_OPENAI_API_KEY}`
+    }
+    const data = {
+      model: "gpt-3.5-turbo",
+      messages: [{"role": "user", "content": message}]
+    }
+
+    setIsLoading(true)
+    axios.post(url, data, {headers: headers})
+    .then((response) => {
+      console.log(response)
+      setDescriere(response.data.choices[0].message.content)
+      setIsLoading(false)
+    })
+    .catch((error: any) => {
+      setIsLoading(false)
+      console.log(error)
+    })
+  }
+
   const handleSubmit = (e: any) => {
     e.preventDefault()
-    if(existPasi === true) {
+    if(existPasi === true && readyToRequest === true) {
       setFinalDraft(`
         Prefa-te ca ai rolul unui inginer in constructii si sef de santier, lucrand in cadrul unei firme renumite constructii, 
         iar impreuna cu echipa ta formata din ${formData.muncitori} muncitori ai realizat o lucrare cu urmatorul nume: ${formData.titlu_lucrare}.  
         Pentru realizarea acestiei lucarii ai urmatorit urmatorii pasi: ${pasiEnumerati}, 
         Creeaza un text de maxim ${formData.randuri} randuri care descrie intregul proces al acestei lucrari pas cu pas, devzolvatat 
         cu terminologia apropriata domeniului constructii, nu include faptul ca esti inginer, nu include faptul ca lucrezi in cadrul 
-        unei firme. ${formData.detalii.length !== 0 ? `Te rog sa adaugi ca ${formData.detalii}` : ''}
+        unei firme. Te rog sa respecti numarul de randuri si sa nu faci descrierea mai lunga de 250 de cuvinte.
+        Te rog sa tii cont si de urmatoarele detalii: ${formData.detalii.length !== 0 ? `Te rog sa adaugi ca ${formData.detalii}` : ''}.
+        Te rog sa mentii un ton profesional, dar si prietenos.
+
+        Pentru un exemplu de structura a acestei descrieri te-as ruga sa urmaresti urmatorul model de exprimare.
+
+        S-au continuat lucrarile de igienizare a pereților interiori de la parterul cladirii “Statie Gratare Dese” din Aria 03, 
+        prin efectuarea operatiunilor de aplicare a unui strat de amorsa pentru vopsele lavabile acrilice pe bază de apă și 
+        microemulsii, cu mare putere liantă, urmat de aplicarea unei vopsele lavabile acrilice, superlavabile, cu efect mat, 
+        care elimină fisurile, garantând o elasticitate optimă și având o rezistenţă ridicată la alge, ciuperci, mucegaiuri 
+        şi la agenţii atmosferici. Aplicarea vopselei a fost executata cu ajutorul unor trafaleti cu fir scurt din poliamidă.
+
+        Uite un alt exemplu:
+
+        S-au continuat lucrarile de igienizare a pereților interiori de la parterul cladirii “Statie Gratare Dese” din Aria 03, 
+        prin efectuarea operatiunilor de aplicare a unui strat de amorsa pentru vopsele lavabile acrilice pe bază de apă și 
+        microemulsii, cu mare putere liantă, urmat de aplicarea unei vopsele lavabile acrilice, superlavabile, cu efect mat, 
+        care elimină fisurile, garantând o elasticitate optimă și având o rezistenţă ridicată la alge, ciuperci, mucegaiuri 
+        şi la agenţii atmosferici. Aplicarea vopselei a fost executata cu ajutorul unor trafaleti cu fir scurt din poliamidă.
     `)
+    sendMessage(finalDraft)
     }
-    else if(existPasi === false) {
+    else if(existPasi === false && readyToRequest === true) {
       setFinalDraft(`
-      Prefa-te ca ai rolul unui inginer in constructii si sef de santier, lucrand in cadrul unei firme renumite constructii, iar impreuna 
-      cu echipa ta formata din ${formData.muncitori} ai realizat o lucrare cu urmatorul nume: ${formData.titlu_lucrare}.  Pentru realizarea acestei 
-      lucrari s-au urmarit anumiti pasi, foloseste-ti cunostintele de inginer si afiseaza in ordine cronologica pasii realizarii lucrarii.
-      Creeaza un text de maxim ${formData.randuri} randuri care descrie intregul proces al acestei lucrari pas cu pas, devzolvatat cu terminologia apropriata
-      domeniului constructii, nu include faptul ca esti inginer, nu include faptul ca lucrezi in cadrul unei firme. 
-      ${formData.detalii.length !== 0 ? `Te rog sa adaugi ca ${formData.detalii}` : ''}
-  `)
+        Prefa-te ca ai rolul unui inginer in constructii si sef de santier, lucrand in cadrul unei firme renumite constructii, iar impreuna 
+        cu echipa ta formata din ${formData.muncitori} ai realizat o lucrare cu urmatorul nume: ${formData.titlu_lucrare}.  Pentru realizarea acestei 
+        lucrari s-au urmarit anumiti pasi, foloseste-ti cunostintele de inginer si afiseaza in ordine cronologica pasii realizarii lucrarii.
+        Creeaza un text de maxim ${formData.randuri} randuri care descrie intregul proces al acestei lucrari pas cu pas, devzolvatat cu terminologia apropriata
+        domeniului constructii, nu include faptul ca esti inginer, nu include faptul ca lucrezi in cadrul unei firme. 
+        Te rog sa tii cont si de urmatoarele detalii: ${formData.detalii.length !== 0 ? `Te rog sa adaugi ca ${formData.detalii}` : ''}.
+        Te rog sa mentii un ton profesional, dar si prietenos.
+
+        Pentru un exemplu de structura a acestei descrieri te-as ruga sa urmaresti urmatorul model de exprimare.
+
+        S-au continuat lucrarile de igienizare a pereților interiori de la parterul cladirii “Statie Gratare Dese” din Aria 03, 
+        prin efectuarea operatiunilor de aplicare a unui strat de amorsa pentru vopsele lavabile acrilice pe bază de apă și 
+        microemulsii, cu mare putere liantă, urmat de aplicarea unei vopsele lavabile acrilice, superlavabile, cu efect mat, 
+        care elimină fisurile, garantând o elasticitate optimă și având o rezistenţă ridicată la alge, ciuperci, mucegaiuri 
+        şi la agenţii atmosferici. Aplicarea vopselei a fost executata cu ajutorul unor trafaleti cu fir scurt din poliamidă.
+
+        Uite un alt exemplu:
+
+        S-au continuat lucrarile de igienizare a pereților interiori de la parterul cladirii “Statie Gratare Dese” din Aria 03, 
+        prin efectuarea operatiunilor de aplicare a unui strat de amorsa pentru vopsele lavabile acrilice pe bază de apă și 
+        microemulsii, cu mare putere liantă, urmat de aplicarea unei vopsele lavabile acrilice, superlavabile, cu efect mat, 
+        care elimină fisurile, garantând o elasticitate optimă și având o rezistenţă ridicată la alge, ciuperci, mucegaiuri 
+        şi la agenţii atmosferici. Aplicarea vopselei a fost executata cu ajutorul unor trafaleti cu fir scurt din poliamidă.
+      `)
+      sendMessage(finalDraft)
   }
   }
 
@@ -88,7 +173,7 @@ export default function Home() {
         pasi: pasiEnumerati
       }));
 
-      setPasInput(''); // Clear the input field after adding the item
+      setPasInput(''); 
     }
 };
 
@@ -120,7 +205,10 @@ export default function Home() {
                   htmlFor = "titlu_lucrare"
                   className = "text-gray-500 mb-2 font-bold font-[Poppins]"
                 >
-                  Titlu Lucrare
+                  <div className = "flex justify-between">
+                    <p>Titlu Lucrare</p>
+                    <span className = "text-green-500 font-bold text-sm"> OBLIGATORIU </span>
+                  </div>
                 </label>
                 <input 
                   id = "titlu_lucrare"
@@ -137,7 +225,10 @@ export default function Home() {
                   htmlFor = "muncitori"
                   className = "text-gray-500 mb-2 font-bold font-[Poppins]"
                 >
-                  Numar Muncitori
+                  <div className = "flex justify-between">
+                    <p>Numar Muncitori</p>
+                    <span className = "text-green-500 font-bold text-sm"> OBLIGATORIU </span>
+                  </div>
                 </label>
                 <input 
                   id = "muncitori"
@@ -154,7 +245,10 @@ export default function Home() {
                   htmlFor = "randuri"
                   className = "text-gray-500 mb-2 font-bold font-[Poppins]"
                 >
-                  Randuri
+                  <div className = "flex justify-between">
+                    <p>Randuri</p>
+                    <span className = "text-green-500 font-bold text-sm"> OBLIGATORIU </span>
+                  </div>
                 </label>
                 <input 
                   id = "randuri"
@@ -212,7 +306,10 @@ export default function Home() {
                       htmlFor = "pas"
                       className = "text-gray-500 mb-2 font-bold font-[Poppins]"
                     >
-                      Adauga Pas
+                    <div className = "flex justify-between">
+                      <p>Adauga Pas</p>
+                      <span className = "text-green-500 font-bold text-sm">  </span>
+                    </div>
                     </label>
                     <input 
                       id = "pas"
@@ -238,14 +335,11 @@ export default function Home() {
                   >
                     Adauga Pas
                   </button>
-                  
                 </div>
-               
-               
               )}
             </form>
           </div>
-
+          
           <div className = "2xl:w-1/2 w-full h-full mt-[2rem] flex flex-col">
             <div className = "flex flex-col">
                   <h1 className = "font-bold text-gray-500">Pasi Enumarati</h1>
@@ -267,15 +361,38 @@ export default function Home() {
                 </div>
 
                 <div className = "rezultat flex flex-col gap-2 mt-4">
-                  <h1 className = "text-gray-500 font-bold">Rezultat</h1>
-                  <p>{ finalDraft }</p>
-                  <button type = "submit" className = "bg-gray-300 mt-4 p-2 hover:bg-green-800 text-black duration-100 hover:text-white rounded-xl" onClick = {handleSubmit}>
-                      Submit
+                  <div className = "flex justify-between w-full items-center">
+                    <h1 className = "text-gray-500 font-bold">Rezultat</h1>
+                    <div className = "flex gap-2">
+                      <p className = "font-bold text-green-500">{copyStatus}</p>
+                      <button 
+                        onClick = {handleCopy(descriere)}
+                        className = " flex justify-center items-center rounded-sm bg-gray-200 w-6 h-6 hover:shadow-md hover:cursor-pointer transition-all duration-100 active:bg-green-600"
+                      >
+                        <HiClipboardCopy className = "active:bg-green-600 duration-100 transition-all"/>
+                      </button>
+                    </div>
+                  </div>
+                  <div className = "flex items-center justify-center w-full h-auto">
+                    <p>{ isLoading === true ? (
+                      <div className = "flex gap-2">
+                        <p className = "text-green-600 font-bold animate-pulse">SE GENEREAZA</p>
+                        <LoadingAnimation/>
+                      </div>
+                    ) : descriere }</p>
+                  </div>
+                  <button 
+                    type = "submit" 
+                    className = "bg-gray-300 disabled:bg-gray-500 disabled:hover:text-black mt-4 p-2 hover:bg-green-800 text-black duration-100 hover:text-white rounded-xl" 
+                    disabled = {readyToRequest === true ? false : true}
+                    onClick = {handleSubmit}
+                  >
+                      Genereaza
                   </button>
-                  <Link onClick = {handleCopy(finalDraft)} href = "https://chat.openai.com/" target= "_blank" className = "bg-gray-300 mt-4 flex justify-center items-center hover:bg-green-800 w-full p-2 rounded-lg transition-all hover:text-white duration-100">
+                  {/* <Link onClick = {handleCopy(finalDraft)} href = "https://chat.openai.com/" target= "_blank" className = "bg-gray-300 mt-4 flex justify-center items-center hover:bg-green-800 w-full p-2 rounded-lg transition-all hover:text-white duration-100">
                       Copy + ChatGPT
-                  </Link>
-                  {copyStatus}
+                  </Link> 
+                  {copyStatus} */}
                 </div>
           </div>
 
