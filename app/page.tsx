@@ -14,7 +14,7 @@ import { useCopyToClipboard } from '@/hooks/useCopyToClipboard'
 export default function Home() {
 
   const [copiedText, copy] = useCopyToClipboard()
-
+ // latest
   const handleCopy = (text: string) => () => {
     copy(text)
       .then(() => {
