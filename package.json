@@ -4,20 +4,32 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "build": "next build"
   },
   "dependencies": {
+    "@iconify/react": "^4.1.1",
+    "angular-expressions": "^1.2.1",
     "axios": "^1.6.7",
+    "clsx": "^2.1.0",
+    "docxtemplater": "^3.46.0",
+    "easy-template-x": "^3.2.0",
+    "file-saver": "^2.0.5",
+    "framer-motion": "^11.0.8",
+    "froala-editor": "^4.1.4",
     "next": "14.1.0",
     "node": "^21.6.2",
     "npm": "^10.4.0",
+    "pizzip": "^3.1.6",
     "react": "^18",
     "react-dom": "^18",
-    "react-icons": "^5.0.1"
+    "react-froala-wysiwyg": "^4.1.4",
+    "react-icons": "^5.0.1",
+    "tailwind-merge": "^2.2.1"
   },
   "devDependencies": {
+    "@types/file-saver": "^2.0.7",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-copy-to-clipboard": "^5.0.7",
