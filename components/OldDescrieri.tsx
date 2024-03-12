@@ -1,19 +1,12 @@
 "use client"
 
-// BUG generare prim pas pieredere tokenuri degeaba
-
-import {useState, useEffect} from 'react'
+import { useState, useEffect } from 'react'
 import { formData } from '@/types/types';
 import axios from 'axios'
 import LoadingAnimation from '@/components/LoadingAnimation';
 import { HiClipboardCopy } from "react-icons/hi";
 import { useCopyToClipboard } from '@/hooks/useCopyToClipboard'
-
-import 'froala-editor/css/froala_style.min.css';
-import 'froala-editor/css/froala_editor.pkgd.min.css';
-
-import FroalaEditorView from 'react-froala-wysiwyg';
-
+import Tiptap from './Tiptap';
 
 export default function OldDescrieri() {
 
@@ -44,17 +37,27 @@ export default function OldDescrieri() {
     detalii: ""
   });
 
-  const [existPasi, setExistPasi] = useState<boolean>(false)
   const [pasInput, setPasInput] = useState<string>('')
-  const [finalDraft, setFinalDraft] = useState<string>('')
   const [copyStatus, setCopyStatus] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [descriere, setDescriere] = useState<string>('')
+  const [finalDraft, setFinalDraft] = useState<string>('')
   const [readyToRequest, setReadyToRequest] = useState<boolean>(false)
 
   useEffect(() => {
     handleValidation()
   }, [formData])
+
+  useEffect(() => {
+    if(finalDraft.length > 10) {
+      sendMessage(finalDraft)
+      setReadyToRequest(false)
+      setTimeout(() => {
+        setReadyToRequest(true)
+      }, 5000)
+      setFinalDraft('')
+    }
+  }, [finalDraft])
 
   const handleInputChange = (e: any) => {
     setPasInput(e.target.value);
@@ -109,16 +112,16 @@ export default function OldDescrieri() {
     })
   }
 
-  const handleModelChange = (event: string) => {
-    const descriere = event.slice(3)
-    const descriere2 = descriere.slice(0, -4)
+  const handleContentChange = (newDescriptrion: string) => {
+    console.log(newDescriptrion)
+    const descriere1 = newDescriptrion.slice(3)
+    const descriere2 = descriere1.slice(0, -4)
     setDescriere(descriere2)
-}
+  }
 
   const handleSubmit = (e: any) => {
     e.preventDefault()
-    if(existPasi === true && readyToRequest === true) {
-      setFinalDraft(`
+    setFinalDraft(`
         Prefa-te ca ai rolul unui inginer in constructii si sef de santier, lucrand in cadrul unei firme renumite constructii, 
         iar impreuna cu echipa ta formata din ${formData.muncitori} muncitori ai realizat o lucrare cu urmatorul nume: ${formData.titlu_lucrare}.  
         Pentru realizarea acestiei lucarii ai urmatorit urmatorii pasi: ${pasiEnumerati}, 
@@ -144,36 +147,6 @@ export default function OldDescrieri() {
         care elimină fisurile, garantând o elasticitate optimă și având o rezistenţă ridicată la alge, ciuperci, mucegaiuri 
         şi la agenţii atmosferici. Aplicarea vopselei a fost executata cu ajutorul unor trafaleti cu fir scurt din poliamidă.
     `)
-    sendMessage(finalDraft)
-    }
-    else if(existPasi === false && readyToRequest === true) {
-      setFinalDraft(`
-        Prefa-te ca ai rolul unui inginer in constructii si sef de santier, lucrand in cadrul unei firme renumite constructii, iar impreuna 
-        cu echipa ta formata din ${formData.muncitori} ai realizat o lucrare cu urmatorul nume: ${formData.titlu_lucrare}.  Pentru realizarea acestei 
-        lucrari s-au urmarit anumiti pasi, foloseste-ti cunostintele de inginer si afiseaza in ordine cronologica pasii realizarii lucrarii.
-        Creeaza un text de maxim ${formData.randuri} randuri care descrie intregul proces al acestei lucrari pas cu pas, devzolvatat cu terminologia apropriata
-        domeniului constructii, nu include faptul ca esti inginer, nu include faptul ca lucrezi in cadrul unei firme. 
-        Te rog sa tii cont si de urmatoarele detalii: ${formData.detalii.length !== 0 ? `Te rog sa adaugi ca ${formData.detalii}` : ''}.
-        Te rog sa mentii un ton profesional, dar si prietenos.
-
-        Pentru un exemplu de structura a acestei descrieri te-as ruga sa urmaresti urmatorul model de exprimare.
-
-        S-au continuat lucrarile de igienizare a pereților interiori de la parterul cladirii “Statie Gratare Dese” din Aria 03, 
-        prin efectuarea operatiunilor de aplicare a unui strat de amorsa pentru vopsele lavabile acrilice pe bază de apă și 
-        microemulsii, cu mare putere liantă, urmat de aplicarea unei vopsele lavabile acrilice, superlavabile, cu efect mat, 
-        care elimină fisurile, garantând o elasticitate optimă și având o rezistenţă ridicată la alge, ciuperci, mucegaiuri 
-        şi la agenţii atmosferici. Aplicarea vopselei a fost executata cu ajutorul unor trafaleti cu fir scurt din poliamidă.
-
-        Uite un alt exemplu:
-
-        S-au continuat lucrarile de igienizare a pereților interiori de la parterul cladirii “Statie Gratare Dese” din Aria 03, 
-        prin efectuarea operatiunilor de aplicare a unui strat de amorsa pentru vopsele lavabile acrilice pe bază de apă și 
-        microemulsii, cu mare putere liantă, urmat de aplicarea unei vopsele lavabile acrilice, superlavabile, cu efect mat, 
-        care elimină fisurile, garantând o elasticitate optimă și având o rezistenţă ridicată la alge, ciuperci, mucegaiuri 
-        şi la agenţii atmosferici. Aplicarea vopselei a fost executata cu ajutorul unor trafaleti cu fir scurt din poliamidă.
-      `)
-      sendMessage(finalDraft)
-  }
   }
 
   const handleAddItem = (e: any) => {
@@ -184,7 +157,6 @@ export default function OldDescrieri() {
         ...prevState,
         pasi: pasiEnumerati
       }));
-
       setPasInput(''); 
     }
 };
@@ -354,33 +326,29 @@ export default function OldDescrieri() {
                     </div>
                   </div>
                   <div className = "flex items-center justify-center w-full h-auto">
-                    <p>{ isLoading === true ? (
+                    <div className = "w-full">{ isLoading === true ? (
                       <div className = "flex gap-2">
                         <p className = "text-green-600 font-bold animate-pulse">SE GENEREAZA</p>
                         <LoadingAnimation/>
                       </div>
-                    ) :  <FroalaEditorView
-                    config = {{
-                        placeholderText: "Editor Descriere",
-                        charCounterCount: true,
-                        tag: 'textarea',
-                    }} 
-                    model = {descriere}
-                    onModelChange={handleModelChange}
-                />  }</p>
+                    ) :  <>
+                      <div className = "w-full">
+                        <Tiptap
+                            content = { descriere }
+                            onChange = {(newContent: string) => handleContentChange(newContent)}
+                        />
+                       </div> 
+                    </>}
+                    </div>
                   </div>
                   <button 
                     type = "submit" 
                     className = "bg-gray-300 disabled:bg-gray-500 disabled:hover:text-black mt-4 p-2 hover:bg-green-800 text-black duration-100 hover:text-white rounded-xl" 
                     disabled = {readyToRequest === true ? false : true}
-                    onClick = {handleSubmit}
+                    onClick = {(e) => {handleSubmit(e)}}
                   >
                       Genereaza
                   </button>
-                  {/* <Link onClick = {handleCopy(finalDraft)} href = "https://chat.openai.com/" target= "_blank" className = "bg-gray-300 mt-4 flex justify-center items-center hover:bg-green-800 w-full p-2 rounded-lg transition-all hover:text-white duration-100">
-                      Copy + ChatGPT
-                  </Link> 
-                  {copyStatus} */}
                 </div>
           </div>
 

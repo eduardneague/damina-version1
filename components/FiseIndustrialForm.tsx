@@ -1,22 +1,15 @@
 "use client"
 
-import {useState, useEffect, useRef} from 'react'
+import { useState, useEffect } from 'react'
+
 import { fisaIndustrialType } from '@/types/types';
-import axios from 'axios'
 import LoadingAnimation from '@/components/LoadingAnimation';
+
+import axios from 'axios'
 import { HiClipboardCopy } from "react-icons/hi";
 import { useCopyToClipboard } from '@/hooks/useCopyToClipboard'
 
-import 'froala-editor/css/froala_style.min.css';
-import 'froala-editor/css/froala_editor.pkgd.min.css';
-
-import FroalaEditorView from 'react-froala-wysiwyg';
-import Docxtemplater from 'docxtemplater';
-import PizZip from 'pizzip';
-import PizZipUtils from 'pizzip/utils/index.js';
-import { saveAs } from 'file-saver';
-import expressionParser from 'docxtemplater/expressions';
-//try 
+import Tiptap from '@/components/Tiptap'
 
 export default function FiseIndustrialForm() {
     const [copiedText, copy] = useCopyToClipboard()
@@ -35,8 +28,6 @@ export default function FiseIndustrialForm() {
         reprezentant_anb: "",
         status: "DA"
     });
-
-    const [existPasi, setExistPasi] = useState<boolean>(false)
     const [pasInput, setPasInput] = useState<string>('')
     const [finalDraft, setFinalDraft] = useState<string>('')
     const [copyStatus, setCopyStatus] = useState<string>('');
@@ -44,61 +35,33 @@ export default function FiseIndustrialForm() {
     const [descriere, setDescriere] = useState<string>('')
     const [readyToRequest, setReadyToRequest] = useState<boolean>(false)
 
-    function loadFile(url: any, callback: any) {
-        PizZipUtils.getBinaryContent(url, callback);
-    }
-
-    const generateDocument = () => {
-        loadFile(
-          'https://www.hostize.com/d/yS2W1QlA_X/file.docx', // Fix this tomorrow
-          function (error: any, content: any) {
-            if (error) {
-              throw error;
-            }
-            const zip = new PizZip(content);
-            const doc = new Docxtemplater(zip, {
-              paragraphLoop: true,
-              linebreaks: true,
-              parser: expressionParser,
-            });
-            doc.render({
-              denumire_lucrare: formData.denumire_lucrare,
-              aria: formData.aria,
-              zona: formData.zona,
-              tip_activitate: formData.tip_activitate,
-              descriere: descriere,
-              status: formData.status,
-              executant: formData.executant,
-              reprezentant_anb: formData.reprezentant_anb,
-              data: formData.data,
-              numar_fisa: formData.numar_fisa,
-            });
-            const out = doc.getZip().generate({
-              type: 'blob',
-              mimeType:
-                'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-            }); 
-            saveAs(out, 'output.docx');
-          }
-        );
-      };
-
-    const jsonData = {
-        "denumire_lucrare": formData.denumire_lucrare,
-        "aria": formData.aria,
-        "zona": formData.zona,
-        "tip_activitate": formData.tip_activitate,
-        "descriere": descriere,
-        "status": formData.status,
-        "executant": formData.executant,
-        "reprezentant_anb": formData.reprezentant_anb,
-        "data": formData.data,
-        "numar_fisa": formData.numar_fisa,
-    }
+    // const jsonData = {
+    //     "denumire_lucrare": formData.denumire_lucrare,
+    //     "aria": formData.aria,
+    //     "zona": formData.zona,
+    //     "tip_activitate": formData.tip_activitate,
+    //     "descriere": descriere,
+    //     "status": formData.status,
+    //     "executant": formData.executant,
+    //     "reprezentant_anb": formData.reprezentant_anb,
+    //     "data": formData.data,
+    //     "numar_fisa": formData.numar_fisa,
+    // }
 
     useEffect(() => {
         handleValidation()
     }, [formData])
+
+    useEffect(() => {
+        if(finalDraft.length > 10) {
+          sendMessage(finalDraft)
+          setReadyToRequest(false)
+          setTimeout(() => {
+            setReadyToRequest(true)
+          }, 5000)
+          setFinalDraft('')
+        }
+      }, [finalDraft])
 
     const handleInputChange = (e: any) => {
         setPasInput(e.target.value);
@@ -119,6 +82,7 @@ export default function FiseIndustrialForm() {
             }, 650)
         })
     }
+    
     const handleValidation = () => {
         if(formData.denumire_lucrare.length > 0 
             && formData.pasi.length > 0 
@@ -133,9 +97,9 @@ export default function FiseIndustrialForm() {
 
     const stergePas = (elem: any) => {
         for (let i = 0; i < pasiEnumerati.length; i++) {
-        if(i === elem) {
-            setPasiEnumerati(prevPasi => prevPasi.filter((pas, index) => index !== elem))
-        }
+            if(i === elem) {
+                setPasiEnumerati(prevPasi => prevPasi.filter((pas, index) => index !== elem))
+            }
         }
     }
 
@@ -144,9 +108,6 @@ export default function FiseIndustrialForm() {
         ...prevState,
         [e.target.name]: e.target.value
         }));
-        if(formData.pasi.length > 0) {
-            setExistPasi(true)
-        } else setExistPasi(false)
     }
 
     const sendMessage = (message: string) => {
@@ -174,13 +135,14 @@ export default function FiseIndustrialForm() {
         })
     }
 
-    const handleModelChange = (event: string) => {
-        const descriere = event.slice(3)
-        const descriere2 = descriere.slice(0, -4)
+    const handleContentChange = (newDescriptrion: string) => {
+        console.log(newDescriptrion)
+        const descriere1 = newDescriptrion.slice(3)
+        const descriere2 = descriere1.slice(0, -4)
         setDescriere(descriere2)
     }
 
-    // console.log("descriere: "  + descriere) Descriere Check
+    // console.log("descriere: "  + descriere) // Check Descriere
 
     const handleSubmit = (e: any) => {
         e.preventDefault()
@@ -210,7 +172,6 @@ export default function FiseIndustrialForm() {
         care elimină fisurile, garantând o elasticitate optimă și având o rezistenţă ridicată la alge, ciuperci, mucegaiuri 
         şi la agenţii atmosferici. Aplicarea vopselei a fost executata cu ajutorul unor trafaleti cu fir scurt din poliamidă.
         `)
-        sendMessage(finalDraft)
     }
 
     const handleAddItem = (e: any) => {
@@ -519,8 +480,7 @@ export default function FiseIndustrialForm() {
                     >
                         Adauga Pas
                     </button>
-                    </div>
-                
+                    </div>  
                 </form>
             </div>
             
@@ -540,7 +500,6 @@ export default function FiseIndustrialForm() {
                             </button>
                         </div>
                         ))}
-
                     </div>
                     </div>
 
@@ -558,21 +517,18 @@ export default function FiseIndustrialForm() {
                         </div>
                     </div>
                     <div className = "flex items-center justify-center w-full h-auto">
-                        <div>{ isLoading === true ? (
+                        <div className = "w-full">{ isLoading === true ? (
                             <div className = "flex gap-2">
                             <p className = "text-green-600 font-bold animate-pulse">SE GENEREAZA</p>
                             <LoadingAnimation/>
                         </div>
                         ) : 
-                        <FroalaEditorView
-                            config = {{
-                                placeholderText: "Editor Descriere",
-                                charCounterCount: true,
-                                tag: 'textarea',
-                            }} 
-                            model = {descriere}
-                            onModelChange={handleModelChange}
-                        /> 
+                       <div className = "w-full">
+                        <Tiptap
+                            content = { descriere }
+                            onChange = {(newContent: string) => handleContentChange(newContent)}
+                        />
+                       </div> 
                         }
                         </div>
                     </div>
@@ -590,15 +546,13 @@ export default function FiseIndustrialForm() {
                         type = "button" 
                         className = "bg-gray-300 disabled:bg-gray-500 disabled:hover:text-black mt-4 p-2 hover:bg-green-800 text-black duration-100 hover:text-white rounded-xl" 
                         disabled = {descriere.length > 0 ? false : true}
-                        onClick = {generateDocument}
+                        onClick = {() => console.log('generate document')}
                     >
                         Genereaza Document
                     </button>
                     </div>
-            </div>
-
-            </div>
-            
+                </div>
+                </div>
             </div>
         </main>
     );

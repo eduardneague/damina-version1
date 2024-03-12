@@ -25,7 +25,7 @@ export default function RootLayout({
       <body className={`bg-white ${inter.className}`}>
         <div className = "flex">
           <SideNav/>
-          <main className = "flex-1">
+          <main className = "flex-1 text-sm md:text-base">
             <MarginWidthWrapper>
               <Header/>
               <HeaderMobile/>
