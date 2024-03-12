@@ -136,7 +136,7 @@ export default function FiseIndustrialForm() {
     }
 
     const handleContentChange = (newDescriptrion: string) => {
-        console.log(newDescriptrion)
+        // console.log(newDescriptrion) // check description changes
         const descriere1 = newDescriptrion.slice(3)
         const descriere2 = descriere1.slice(0, -4)
         setDescriere(descriere2)
