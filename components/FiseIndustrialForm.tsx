@@ -164,7 +164,7 @@ export default function FiseIndustrialForm() {
         setDescriere(descriere2)
     }
 
-    console.log("descriere: "  + descriere) // Check Descriere
+    // console.log("descriere: "  + descriere) // Check Descriere
 
     const handleSubmit = (e: any) => {
         e.preventDefault()
