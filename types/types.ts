@@ -30,6 +30,7 @@ export type fisaIndustrialType = {
     executant: string;
     data: string;
     tip_activitate: "Corectiv" | "Preventiv";
+    locatie_specifica: string;
     reprezentant_anb: string;
     status: "DA" | "NU";
 }

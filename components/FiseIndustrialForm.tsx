@@ -22,12 +22,14 @@ export default function FiseIndustrialForm() {
         detalii: "",
         aria: "",
         zona: "",
+        locatie_specifica: "",
         executant: "",
         data: "",
         tip_activitate: "Corectiv",
         reprezentant_anb: "",
         status: "DA"
     });
+
     const [pasInput, setPasInput] = useState<string>('')
     const [finalDraft, setFinalDraft] = useState<string>('')
     const [copyStatus, setCopyStatus] = useState<string>('');
@@ -89,7 +91,8 @@ export default function FiseIndustrialForm() {
             && formData.executant.length > 0
             && formData.data.length > 0
             && formData.aria.length > 0
-            && formData.zona.length > 0){
+            && formData.zona.length > 0
+            && formData.locatie_specifica.length > 0){
         setReadyToRequest(true)
         }
         else setReadyToRequest(false)
@@ -148,7 +151,9 @@ export default function FiseIndustrialForm() {
         e.preventDefault()
         setFinalDraft(`
         Prefa-te ca ai rolul unui inginer in constructii si sef de santier, lucrand in cadrul unei firme renumite constructii, 
-        iar impreuna cu echipa ta de muncitori ai realizat o lucrare cu urmatorul nume: ${formData.denumire_lucrare}.  
+        iar impreuna cu echipa ta de muncitori ai realizat o lucrare cu urmatorul nume: ${formData.denumire_lucrare}.
+        Te rog sa incepi descrierea ca in exemplele de mai jos, aratand clar aria, zona si locatia specifica in care a fost realizata lucrarea.
+        Aria va fi: ${formData.aria}, zona va fi: ${formData.zona}, iar locatia specifica va fi: ${formData.locatie_specifica}  
         Pentru realizarea acestiei lucarii ai urmatorit urmatorii pasi: ${pasiEnumerati}, 
         Creeaza un text de maxim ${formData.randuri} randuri care descrie intregul proces al acestei lucrari pas cu pas, devzolvatat 
         cu terminologia apropriata domeniului constructii, nu include faptul ca esti inginer, nu include faptul ca lucrezi in cadrul 
@@ -335,12 +340,32 @@ export default function FiseIndustrialForm() {
                     </div>
                     </label>
                     <input 
-                    id = "zona"
-                    type = "text" 
-                    name = "zona"
-                    onChange = {(e: any) => updateForm(e)}
-                    placeholder = "Zona"
-                    className = "rounded-sm bg-gray-100 focus:outline-green-600 p-2 w-full "
+                        id = "zona"
+                        type = "text" 
+                        name = "zona"
+                        onChange = {(e: any) => updateForm(e)}
+                        placeholder = "Zona"
+                        className = "rounded-sm bg-gray-100 focus:outline-green-600 p-2 w-full "
+                    />
+                </div>
+
+                <div className = "mt-4">
+                    <label 
+                    htmlFor = "locatie_specifica"
+                    className = "text-gray-500 mb-2 font-bold "
+                    >
+                    <div className = "flex justify-between">
+                        <p>Locatie Specifica (Ex: Cladire / Bazin)</p>
+                        <span className = "text-green-500 font-bold text-sm"> * </span>
+                    </div>
+                    </label>
+                    <input 
+                        id = "locatie_specifica"
+                        type = "text" 
+                        name = "locatie_specifica"
+                        onChange = {(e: any) => updateForm(e)}
+                        placeholder = "Locatie Specifica"
+                        className = "rounded-sm bg-gray-100 focus:outline-green-600 p-2 w-full "
                     />
                 </div>
 
