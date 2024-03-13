@@ -189,12 +189,12 @@ export default function FiseIndustrialForm() {
 
 
     return (
-        <main className="flex min-h-screen items-center flex-col font-[Poppins]">
+        <main className="flex min-h-screen items-center flex-col ">
             <div className = "flex w-full bg-white flex-col p-10 rounded-lg">
             <div className="flex w-full justify-between items-center">
                 <div className = "flex flex-col">
-                <h1 className = "font-bold font-[Poppins] 2xl:text-xl text-sm">Fise Industrial</h1>
-                <h1 className = "font-regular font-[Poppins] text-sm text-gray-500">Generator Fise Industrial</h1>
+                <h1 className = "font-bold  2xl:text-xl text-sm">Fise Industrial</h1>
+                <h1 className = "font-regular  text-sm text-gray-500">Generator Fise Industrial</h1>
                 </div>
             </div>
 
@@ -208,7 +208,7 @@ export default function FiseIndustrialForm() {
                 <div>
                     <label 
                     htmlFor = "denumire_lucrare"
-                    className = "text-gray-500 mb-2 font-bold font-[Poppins]"
+                    className = "text-gray-500 mb-2 font-bold "
                     >
                     <div className = "flex justify-between">
                         <p>Denumire Lucrare</p>
@@ -228,7 +228,7 @@ export default function FiseIndustrialForm() {
                 <div className = "mt-4">
                     <label 
                     htmlFor = "executant"
-                    className = "text-gray-500 mb-2 font-bold font-[Poppins]"
+                    className = "text-gray-500 mb-2 font-bold "
                     >
                     <div className = "flex justify-between">
                         <p>Executant</p>
@@ -248,7 +248,7 @@ export default function FiseIndustrialForm() {
                 <div className = "mt-4">
                     <label 
                     htmlFor = "reprezentant_anb"
-                    className = "text-gray-500 mb-2 font-bold font-[Poppins]"
+                    className = "text-gray-500 mb-2 font-bold "
                     >
                     <div className = "flex justify-between">
                         <p>Reprezentant ANB</p>
@@ -268,7 +268,7 @@ export default function FiseIndustrialForm() {
                 <div className = "mt-4">
                     <label 
                     htmlFor = "numar_fisa"
-                    className = "text-gray-500 mb-2 font-bold font-[Poppins]"
+                    className = "text-gray-500 mb-2 font-bold "
                     >
                     <div className = "flex justify-between">
                         <p>Numar Fisa</p>
@@ -287,7 +287,7 @@ export default function FiseIndustrialForm() {
                 <div className = "mt-4">
                     <label 
                     htmlFor = "data"
-                    className = "text-gray-500 mb-2 font-bold font-[Poppins]"
+                    className = "text-gray-500 mb-2 font-bold "
                     >
                     <div className = "flex justify-between">
                         <p>Data</p>
@@ -307,7 +307,7 @@ export default function FiseIndustrialForm() {
                 <div className = "mt-4">
                     <label 
                     htmlFor = "aria"
-                    className = "text-gray-500 mb-2 font-bold font-[Poppins]"
+                    className = "text-gray-500 mb-2 font-bold "
                     >
                     <div className = "flex justify-between">
                         <p>Aria</p>
@@ -327,7 +327,7 @@ export default function FiseIndustrialForm() {
                 <div className = "mt-4">
                     <label 
                     htmlFor = "zona"
-                    className = "text-gray-500 mb-2 font-bold font-[Poppins]"
+                    className = "text-gray-500 mb-2 font-bold "
                     >
                     <div className = "flex justify-between">
                         <p>Zona</p>
@@ -346,7 +346,7 @@ export default function FiseIndustrialForm() {
 
                 <div className = "mt-4 gap-2">
                     <div className = "flex justify-between">
-                        <p className = " text-gray-500 mb-2 font-bold font-[Poppins]">Tip Activitate</p>
+                        <p className = " text-gray-500 mb-2 font-bold ">Tip Activitate</p>
                         <span className = "text-green-500 font-bold text-sm"> * </span>
                     </div>
 
@@ -378,7 +378,7 @@ export default function FiseIndustrialForm() {
 
                 <div className = "mt-4 gap-2">
                     <div className = "flex justify-between">
-                        <p className = " text-gray-500 mb-2 font-bold font-[Poppins]">Lucrare Finalizata</p>
+                        <p className = " text-gray-500 mb-2 font-bold ">Lucrare Finalizata</p>
                         <span className = "text-green-500 font-bold text-sm"> * </span>
                     </div>
 
@@ -411,7 +411,7 @@ export default function FiseIndustrialForm() {
                 <div className = "mt-4">
                     <label 
                     htmlFor = "randuri"
-                    className = "text-gray-500 mb-2 font-bold font-[Poppins]"
+                    className = "text-gray-500 mb-2 font-bold "
                     >
                     <div className = "flex justify-between">
                         <p>Randuri Descriere</p>
@@ -431,7 +431,7 @@ export default function FiseIndustrialForm() {
                 <div className = "mt-4">
                     <label 
                     htmlFor = "detalii"
-                    className = "text-gray-500 mb-2 font-bold font-[Poppins]"
+                    className = "text-gray-500 mb-2 font-bold "
                     >
                     Detalii Descriere
                     </label>
@@ -449,7 +449,7 @@ export default function FiseIndustrialForm() {
                     <div className = "flex flex-col 2xl:w-[80%] w-full">
                         <label 
                         htmlFor = "pas"
-                        className = "text-gray-500 mb-2 font-bold font-[Poppins]"
+                        className = "text-gray-500 mb-2 font-bold "
                         >
                         <div className = "flex justify-between">
                         <p>Pasi Descriere Lucrare</p>

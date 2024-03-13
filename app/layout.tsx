@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Poppins } from "next/font/google";
 import "./globals.css";
 
 import Header from "@/components/Header";
@@ -8,12 +8,18 @@ import SideNav from "@/components/SideNav";
 import PageWrapper from "@/components/PageWrapper";
 import MarginWidthWrapper from "@/components/MarginWidthWrapper";
 
-const inter = Inter({ subsets: ["latin"] });
-
 export const metadata: Metadata = {
   title: "Damina Glina Software",
   description: "Damina Solutions SRL Software, created by Neague Eduard Ionut",
 };
+
+const poppins = Poppins({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-poppins',
+  weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900']
+});
+
 
 export default function RootLayout({
   children,
@@ -22,7 +28,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`bg-white ${inter.className}`}>
+      <body className={`bg-white ${poppins.className}`}>
         <div className = "flex">
           <SideNav/>
           <main className = "flex-1 text-sm md:text-base">

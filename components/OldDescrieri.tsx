@@ -162,12 +162,12 @@ export default function OldDescrieri() {
 };
 
   return (
-    <main className="flex min-h-screen items-center flex-col font-[Poppins]">
+    <main className="flex min-h-screen items-center flex-col">
         <div className = "flex w-full bg-white flex-col p-10 rounded-lg">
           <div className="flex w-full justify-between items-center">
             <div className = "flex flex-col">
-              <h1 className = "font-bold font-[Poppins] 2xl:text-xl text-sm">Descrieri Lucrari</h1>
-              <h1 className = "font-regular font-[Poppins] text-sm text-gray-500">Generator Descrieri Lucrari</h1>
+              <h1 className = "font-bold 2xl:text-xl text-sm">Descrieri Lucrari</h1>
+              <h1 className = "font-regular text-sm text-gray-500">Generator Descrieri Lucrari</h1>
             </div>
           </div>
 
@@ -181,7 +181,7 @@ export default function OldDescrieri() {
               <div>
                 <label 
                   htmlFor = "titlu_lucrare"
-                  className = "text-gray-500 mb-2 font-bold font-[Poppins]"
+                  className = "text-gray-500 mb-2 font-bold"
                 >
                   <div className = "flex justify-between">
                     <p>Titlu Lucrare</p>
@@ -201,7 +201,7 @@ export default function OldDescrieri() {
               <div className = "mt-4">
                 <label 
                   htmlFor = "muncitori"
-                  className = "text-gray-500 mb-2 font-bold font-[Poppins]"
+                  className = "text-gray-500 mb-2 font-bold"
                 >
                   <div className = "flex justify-between">
                     <p>Numar Muncitori</p>
@@ -220,7 +220,7 @@ export default function OldDescrieri() {
               <div className = "mt-4">
                 <label 
                   htmlFor = "randuri"
-                  className = "text-gray-500 mb-2 font-bold font-[Poppins]"
+                  className = "text-gray-500 mb-2 font-bold"
                 >
                   <div className = "flex justify-between">
                     <p>Randuri</p>
@@ -240,7 +240,7 @@ export default function OldDescrieri() {
               <div className = "mt-4">
                 <label 
                   htmlFor = "detalii"
-                  className = "text-gray-500 mb-2 font-bold font-[Poppins]"
+                  className = "text-gray-500 mb-2 font-bold"
                 >
                   Detalii
                 </label>
@@ -256,7 +256,7 @@ export default function OldDescrieri() {
                   <div className = "flex flex-col 2xl:w-[80%] w-full">
                     <label 
                       htmlFor = "pas"
-                      className = "text-gray-500 mb-2 font-bold font-[Poppins]"
+                      className = "text-gray-500 mb-2 font-bold"
                     >
                     <div className = "flex justify-between">
                       <p>Adauga Pas</p>

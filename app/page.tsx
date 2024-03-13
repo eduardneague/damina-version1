@@ -24,7 +24,7 @@ export default function Home() {
                     >
                       {item.icon}
                       {item.title}
-                    </Link>
+                    </Link> 
                   </>
                 )
               }
