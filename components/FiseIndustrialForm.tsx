@@ -25,9 +25,9 @@ export default function FiseIndustrialForm() {
         locatie_specifica: "",
         executant: "",
         data: "",
-        tip_activitate: "Corectiv",
+        tip_activitate: null,
         reprezentant_anb: "",
-        status: "DA"
+        status: null
     });
 
     const [pasInput, setPasInput] = useState<string>('')
@@ -85,6 +85,25 @@ export default function FiseIndustrialForm() {
         })
     }
     
+    const handleResetareForumlar = () => {
+        setFormData({
+            denumire_lucrare: "",
+            numar_fisa: "",
+            randuri: 10,
+            pasi: [],
+            detalii: "",
+            aria: "",
+            zona: "",
+            locatie_specifica: "",
+            executant: "",
+            data: "",
+            tip_activitate: null,
+            reprezentant_anb: "",
+            status: null
+        })
+        setPasiEnumerati([])
+    }
+
     const handleValidation = () => {
         if(formData.denumire_lucrare.length > 0 
             && formData.pasi.length > 0 
@@ -145,37 +164,29 @@ export default function FiseIndustrialForm() {
         setDescriere(descriere2)
     }
 
-    // console.log("descriere: "  + descriere) // Check Descriere
+    console.log("descriere: "  + descriere) // Check Descriere
 
     const handleSubmit = (e: any) => {
         e.preventDefault()
         setFinalDraft(`
-        Prefa-te ca ai rolul unui inginer in constructii si sef de santier, lucrand in cadrul unei firme renumite constructii, 
-        iar impreuna cu echipa ta de muncitori ai realizat o lucrare cu urmatorul nume: ${formData.denumire_lucrare}.
-        Te rog sa incepi descrierea ca in exemplele de mai jos, aratand clar aria, zona si locatia specifica in care a fost realizata lucrarea.
-        Aria va fi: ${formData.aria}, zona va fi: ${formData.zona}, iar locatia specifica va fi: ${formData.locatie_specifica}  
-        Pentru realizarea acestiei lucarii ai urmatorit urmatorii pasi: ${pasiEnumerati}, 
-        Creeaza un text de maxim ${formData.randuri} randuri care descrie intregul proces al acestei lucrari pas cu pas, devzolvatat 
-        cu terminologia apropriata domeniului constructii, nu include faptul ca esti inginer, nu include faptul ca lucrezi in cadrul 
-        unei firme. Te rog sa respecti numarul de randuri si sa nu faci descrierea mai lunga de 250 de cuvinte.
-        Te rog sa tii cont si de urmatoarele detalii: ${formData.detalii.length !== 0 ? `Te rog sa adaugi ca ${formData.detalii}` : ''}.
-        Te rog sa mentii un ton profesional, dar si prietenos.
+            Prefa-te ca ai rolul unui inginer in constructii si sef de santier, lucrand in cadrul unei firme renumite constructii, 
+            iar impreuna cu echipa ta de muncitori ai realizat o lucrare cu urmatorul nume: ${formData.denumire_lucrare}.
+            Te rog sa incepi descrierea ca in exemplele de mai jos, aratand clar aria, zona si locatia specifica in care a fost realizata lucrarea.
+            Aria va fi: ${formData.aria}, zona va fi: ${formData.zona}, iar locatia specifica va fi: ${formData.locatie_specifica}  
+            Pentru realizarea acestiei lucarii ai urmatorit urmatorii pasi: ${pasiEnumerati}, 
+            Creeaza un text de maxim ${formData.randuri} randuri care descrie intregul proces al acestei lucrari pas cu pas, devzolvatat 
+            cu terminologia apropriata domeniului constructii, nu include faptul ca esti inginer, nu include faptul ca lucrezi in cadrul 
+            unei firme. Te rog sa respecti numarul de randuri si sa nu faci descrierea mai lunga de 250 de cuvinte.
+            ${formData.detalii.length !== 0 ? `Te rog sa adaugi ca ${formData.detalii}` : ''}.
+            Te rog sa mentii un ton profesional, prietenos si asemanator cu exemplul de mai jos.
 
-        Pentru un exemplu de structura a acestei descrieri te-as ruga sa urmaresti urmatorul model de exprimare.
+            Pentru un exemplu de structura a acestei descrieri si stilul de compunere, te-as ruga sa urmaresti urmatorul model de exprimare.
 
-        S-au continuat lucrarile de igienizare a pereților interiori de la parterul cladirii “Statie Gratare Dese” din Aria 03, 
-        prin efectuarea operatiunilor de aplicare a unui strat de amorsa pentru vopsele lavabile acrilice pe bază de apă și 
-        microemulsii, cu mare putere liantă, urmat de aplicarea unei vopsele lavabile acrilice, superlavabile, cu efect mat, 
-        care elimină fisurile, garantând o elasticitate optimă și având o rezistenţă ridicată la alge, ciuperci, mucegaiuri 
-        şi la agenţii atmosferici. Aplicarea vopselei a fost executata cu ajutorul unor trafaleti cu fir scurt din poliamidă.
-
-        Uite un alt exemplu:
-
-        S-au continuat lucrarile de igienizare a pereților interiori de la parterul cladirii “Statie Gratare Dese” din Aria 03, 
-        prin efectuarea operatiunilor de aplicare a unui strat de amorsa pentru vopsele lavabile acrilice pe bază de apă și 
-        microemulsii, cu mare putere liantă, urmat de aplicarea unei vopsele lavabile acrilice, superlavabile, cu efect mat, 
-        care elimină fisurile, garantând o elasticitate optimă și având o rezistenţă ridicată la alge, ciuperci, mucegaiuri 
-        şi la agenţii atmosferici. Aplicarea vopselei a fost executata cu ajutorul unor trafaleti cu fir scurt din poliamidă.
+            S-au continuat lucrarile de igienizare a pereților interiori de la parterul cladirii “Statie Gratare Dese” din Aria 03, 
+            prin efectuarea operatiunilor de aplicare a unui strat de amorsa pentru vopsele lavabile acrilice pe bază de apă și 
+            microemulsii, cu mare putere liantă, urmat de aplicarea unei vopsele lavabile acrilice, superlavabile, cu efect mat, 
+            care elimină fisurile, garantând o elasticitate optimă și având o rezistenţă ridicată la alge, ciuperci, mucegaiuri 
+            şi la agenţii atmosferici. Aplicarea vopselei a fost executata cu ajutorul unor trafaleti cu fir scurt din poliamidă.
         `)
     }
 
@@ -209,7 +220,6 @@ export default function FiseIndustrialForm() {
 
                 <div className = "flex flex-col 2xl:w-1/2 w-full h-full mt-[2rem]">
                 <form onSubmit = {handleSubmit}>
-
                 <div>
                     <label 
                     htmlFor = "denumire_lucrare"
@@ -221,12 +231,13 @@ export default function FiseIndustrialForm() {
                     </div>
                     </label>
                     <input 
-                    id = "denumire_lucrare"
-                    type = "text" 
-                    name = "denumire_lucrare"
-                    onChange = {(e: any) => updateForm(e)}
-                    placeholder = "Title Lucrare"
-                    className = "rounded-sm bg-gray-100 focus:outline-green-600 p-2 w-full "
+                        id = "denumire_lucrare"
+                        type = "text" 
+                        name = "denumire_lucrare"
+                        value = {formData.denumire_lucrare}
+                        onChange = {(e: any) => updateForm(e)}
+                        placeholder = "Title Lucrare"
+                        className = "rounded-sm bg-gray-100 focus:outline-green-600 p-2 w-full "
                     />
                 </div>
 
@@ -244,6 +255,7 @@ export default function FiseIndustrialForm() {
                     id = "executant"
                     type = "text" 
                     name = "executant"
+                    value = {formData.executant}
                     onChange = {(e: any) => updateForm(e)}
                     placeholder = "Executant"
                     className = "rounded-sm bg-gray-100 focus:outline-green-600 p-2 w-full "
@@ -264,6 +276,7 @@ export default function FiseIndustrialForm() {
                     id = "reprezentant_anb"
                     type = "text" 
                     name = "reprezentant_anb"
+                    value = {formData.reprezentant_anb}
                     onChange = {(e: any) => updateForm(e)}
                     placeholder = "Reprezentant ANB"
                     className = "rounded-sm bg-gray-100 focus:outline-green-600 p-2 w-full "
@@ -283,6 +296,7 @@ export default function FiseIndustrialForm() {
                     id = "numar_fisa"
                     type = "text" 
                     name = "numar_fisa"
+                    value = {formData.numar_fisa}
                     onChange = {(e: any) => updateForm(e)}
                     placeholder = "Numar Fisa"
                     className = "rounded-sm bg-gray-100 focus:outline-green-600 p-2 w-full"
@@ -303,6 +317,7 @@ export default function FiseIndustrialForm() {
                     id = "data"
                     type = "text" 
                     name = "data"
+                    value = {formData.data}
                     onChange = {(e: any) => updateForm(e)}
                     placeholder = "Data"
                     className = "rounded-sm bg-gray-100 focus:outline-green-600 p-2 w-full "
@@ -323,6 +338,7 @@ export default function FiseIndustrialForm() {
                     id = "aria"
                     type = "text" 
                     name = "aria"
+                    value = {formData.aria}
                     onChange = {(e: any) => updateForm(e)}
                     placeholder = "Aria"
                     className = "rounded-sm bg-gray-100 focus:outline-green-600 p-2 w-full "
@@ -343,6 +359,7 @@ export default function FiseIndustrialForm() {
                         id = "zona"
                         type = "text" 
                         name = "zona"
+                        value = {formData.zona}
                         onChange = {(e: any) => updateForm(e)}
                         placeholder = "Zona"
                         className = "rounded-sm bg-gray-100 focus:outline-green-600 p-2 w-full "
@@ -363,6 +380,7 @@ export default function FiseIndustrialForm() {
                         id = "locatie_specifica"
                         type = "text" 
                         name = "locatie_specifica"
+                        value = {formData.locatie_specifica}
                         onChange = {(e: any) => updateForm(e)}
                         placeholder = "Locatie Specifica"
                         className = "rounded-sm bg-gray-100 focus:outline-green-600 p-2 w-full "
@@ -435,8 +453,8 @@ export default function FiseIndustrialForm() {
 
                 <div className = "mt-4">
                     <label 
-                    htmlFor = "randuri"
-                    className = "text-gray-500 mb-2 font-bold "
+                        htmlFor = "randuri"
+                        className = "text-gray-500 mb-2 font-bold "
                     >
                     <div className = "flex justify-between">
                         <p>Randuri Descriere</p>
@@ -444,12 +462,13 @@ export default function FiseIndustrialForm() {
                     </div>
                     </label>
                     <input 
-                    id = "randuri"
-                    type = "number" 
-                    name = "randuri"
-                    onChange = {(e: any) => updateForm(e)}
-                    placeholder = "Prestabilit 10 Randuri"
-                    className = "rounded-sm bg-gray-100 focus:outline-green-600 p-2 w-full "
+                        id = "randuri"
+                        type = "number" 
+                        name = "randuri"
+                        value = {formData.randuri}
+                        onChange = {(e: any) => updateForm(e)}
+                        placeholder = "Prestabilit 10 Randuri"
+                        className = "rounded-sm bg-gray-100 focus:outline-green-600 p-2 w-full "
                     />
                 </div>
 
@@ -463,6 +482,7 @@ export default function FiseIndustrialForm() {
                     <textarea 
                     id = "detalii"
                     name = "detalii"
+                    value = {formData.detalii}
                     onChange = {(e: any) => updateForm(e)}
                     placeholder = "Detalii pentru generarea descrierii din fisa"
                     className = "rounded-sm bg-gray-100 focus:outline-green-600 pl-2 pt-2 w-full h-[10rem]"
@@ -505,7 +525,7 @@ export default function FiseIndustrialForm() {
                     >
                         Adauga Pas
                     </button>
-                    </div>  
+                    </div>   
                 </form>
             </div>
             
@@ -574,6 +594,13 @@ export default function FiseIndustrialForm() {
                         onClick = {() => console.log('generate document')}
                     >
                         Genereaza Document
+                    </button>
+                    <button 
+                        type = "button" 
+                        className = "bg-gray-300 disabled:bg-gray-500 disabled:hover:text-black mt-4 p-2 hover:bg-red-800 text-black duration-100 hover:text-white rounded-xl" 
+                        onClick = {handleResetareForumlar}
+                    >
+                        Resetare Formular
                     </button>
                     </div>
                 </div>
