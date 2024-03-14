@@ -150,7 +150,10 @@ const Testfile = ({ data }: Props) => {
                 <Image src="/DAMINA_LOGO.png" style={industrialeStyles.logo} />
                 <Text style={industrialeStyles.topBarText}>
                   E-mail:{" "}
-                  <Link style={industrialeStyles.linkStyle} src="google.com">
+                  <Link
+                    style={industrialeStyles.linkStyle}
+                    src="mail:mentenanta@damina.ro"
+                  >
                     mentenanta@damina.ro
                   </Link>
                   ; Telefon:{" "}

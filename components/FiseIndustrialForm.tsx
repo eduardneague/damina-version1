@@ -193,7 +193,7 @@ export default function FiseIndustrialForm() {
   const handleSubmit = (e: any) => {
     e.preventDefault();
     setFinalDraft(`
-            Prefa-te ca ai rolul unui inginer in constructii si sef de santier, lucrand in cadrul unei firme renumite constructii, 
+            Fara sa folosesti diacritice, prefa-te ca ai rolul unui inginer in constructii si sef de santier, lucrand in cadrul unei firme renumite constructii, 
             iar impreuna cu echipa ta de muncitori ai realizat o lucrare cu urmatorul nume: ${
               formData.denumire_lucrare
             }.
@@ -213,8 +213,7 @@ export default function FiseIndustrialForm() {
                 : ""
             }.
             Te rog sa mentii un ton profesional, prietenos si asemanator cu exemplul de mai jos.
-            Te rog foarte mult, sub absolut nicio forma, sa nu folosesti diacriticele limbii romane.
-
+           
             Pentru un exemplu de structura a acestei descrieri si stilul de compunere, te-as ruga sa urmaresti urmatorul model de exprimare.
 
             S-au continuat lucrarile de igienizare a pereților interiori de la parterul cladirii “Statie Gratare Dese” din Aria 03, 
