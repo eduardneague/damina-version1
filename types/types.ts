@@ -34,3 +34,17 @@ export type fisaIndustrialType = {
     reprezentant_anb: string;
     status: "DA" | "NU" | null;
 }
+
+export type IndustrialePDFData = {
+    denumire_lucrare: string;
+    aria: string;
+    zona: string;
+    tip_activitate: "Corectiv" | "Preventiv" | null;
+    locaite_specifica: string;
+    descriere: string;
+    status: "DA" | "NU" | null;
+    executant: string;
+    reprezentant_anb: string;
+    data: string;
+    numar_fisa: string;
+}
