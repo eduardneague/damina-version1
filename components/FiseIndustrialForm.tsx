@@ -213,8 +213,7 @@ export default function FiseIndustrialForm() {
                 : ""
             }.
             Te rog sa mentii un ton profesional, prietenos si asemanator cu exemplul de mai jos.
-            Te rog foarte mult, sub absolut nicio forma, sa nu folosesti diacriticele limbii romane, foloseste literele alfabetului romanesc, 
-            dar fara diacritice.
+            Te rog foarte mult, sub absolut nicio forma, sa nu folosesti diacriticele limbii romane.
 
             Pentru un exemplu de structura a acestei descrieri si stilul de compunere, te-as ruga sa urmaresti urmatorul model de exprimare.
 
