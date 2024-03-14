@@ -72,8 +72,8 @@ const industrialeStyles = StyleSheet.create({
     color: "rgb(0, 112, 192)",
   },
   logo: {
-    width: "70rem",
-    height: "25rem",
+    width: "90rem",
+    height: "30rem",
   },
   middleContainer: {
     display: "flex",
@@ -83,7 +83,7 @@ const industrialeStyles = StyleSheet.create({
   justifyBetweenContainer: {
     display: "flex",
     flexDirection: "row",
-    width: "400px",
+    width: "500px",
     justifyContent: "space-between",
     alignItems: "center",
     marginTop: "20px",
@@ -127,6 +127,8 @@ const industrialeStyles = StyleSheet.create({
     fontFamily: "Times-Bold",
     marginTop: "40px",
     fontSize: "14px",
+    position: "absolute",
+    bottom: "10px",
   },
   descriereText: {
     fontFamily: "Times-Roman",
@@ -138,8 +140,6 @@ const industrialeStyles = StyleSheet.create({
 
 const Testfile = ({ data }: Props) => {
   // console.log(data); // check test
-  const renderingDelay = 1000; // 1000 = 1 second
-
   return (
     <>
       <Document>
@@ -305,12 +305,11 @@ const Testfile = ({ data }: Props) => {
                   </Text>
                 </View>
               </View>
-              <View style={industrialeStyles.footerContainer}>
-                <Text style={industrialeStyles.footerText}>
-                  CONTRACT MENTENANTA CONSTRUCTII INDUSTRIALE
-                </Text>
-              </View>
+              <View style={industrialeStyles.footerContainer}></View>
             </View>
+            <Text style={industrialeStyles.footerText}>
+              CONTRACT MENTENANTA CONSTRUCTII INDUSTRIALE
+            </Text>
           </View>
         </Page>
       </Document>

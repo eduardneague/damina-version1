@@ -197,6 +197,7 @@ export default function FiseIndustrialForm() {
             iar impreuna cu echipa ta de muncitori ai realizat o lucrare cu urmatorul nume: ${
               formData.denumire_lucrare
             }.
+            Creeaza o descriere in care prezinti lucrarea, intr-un singur paragraf continuu.
             Te rog sa incepi descrierea ca in exemplele de mai jos, aratand clar aria, zona si locatia specifica in care a fost realizata lucrarea.
             Aria va fi: ${formData.aria}, zona va fi: ${
       formData.zona
@@ -690,7 +691,7 @@ export default function FiseIndustrialForm() {
               </PDFDownloadLink>
 
               {/* PDF VIEWER */}
-              {windowSize.width >= 1280 ? (
+              {windowSize.width >= 1000 ? (
                 <div className="w-full h-[60rem] md:block hidden bg-zinc-500">
                   <PDFViewer
                     height="100%"
