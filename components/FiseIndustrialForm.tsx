@@ -667,10 +667,7 @@ export default function FiseIndustrialForm() {
 
               <PDFDownloadLink
                 document={<GeneratorFisaPDF data={industrialeData} />}
-                fileName={`FISA INDUSTRIAL 
-                - ${industrialeData.data} 
-                - Aria ${industrialeData.aria} 
-                - ${industrialeData.denumire_lucrare} ${industrialeData.zona} ${industrialeData.locaite_specifica}`.replaceAll(
+                fileName={`FISA INDUSTRIAL - ${industrialeData.data} - Aria ${industrialeData.aria} - ${industrialeData.denumire_lucrare} ${industrialeData.zona} ${industrialeData.locaite_specifica}`.replaceAll(
                   ".",
                   "/"
                 )}
