@@ -693,7 +693,7 @@ export default function FiseIndustrialForm() {
 
               {/* PDF VIEWER */}
               {isClient ? (
-                <div className="w-full h-[60rem] bg-zinc-500">
+                <div className="w-full h-[60rem] md:block hidden bg-zinc-500">
                   <PDFViewer
                     height="100%"
                     width="100%"
