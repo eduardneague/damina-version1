@@ -185,7 +185,8 @@ export default function FiseIndustrialForm() {
     // console.log(newDescriptrion) // check description changes
     const descriere1 = newDescriptrion.slice(3);
     const descriere2 = descriere1.slice(0, -4);
-    setDescriere(descriere2);
+    const descriere3 = descriere2.replace(/\r?\n|\r/g, "");
+    setDescriere(descriere3);
   };
 
   // console.log("descriere: "  + descriere) // Check Descriere
@@ -661,12 +662,12 @@ export default function FiseIndustrialForm() {
                 disabled={readyToRequest === true ? false : true}
                 onClick={handleSubmit}
               >
-                Genereaza Descriere
+                Generare Descriere
               </button>
 
               <PDFDownloadLink
                 document={<GeneratorFisaPDF data={industrialeData} />}
-                fileName={`FISA INDUSTRIAL - ${industrialeData.data} - Aria ${industrialeData.aria} - ${industrialeData.denumire_lucrare} ${industrialeData.zona} ${industrialeData.locaite_specifica}`.replaceAll(
+                fileName={`${industrialeData.data} - Aria ${industrialeData.aria} - ${industrialeData.denumire_lucrare} ${industrialeData.zona} ${industrialeData.locaite_specifica}`.replaceAll(
                   ".",
                   "/"
                 )}
