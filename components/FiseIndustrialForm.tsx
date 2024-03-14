@@ -659,14 +659,6 @@ export default function FiseIndustrialForm() {
               </button>
               <button
                 type="button"
-                className="bg-gray-300 disabled:bg-gray-500 disabled:hover:text-black mt-4 p-2 hover:bg-green-800 text-black duration-100 hover:text-white rounded-xl"
-                disabled={descriere.length > 0 ? false : true}
-                onClick={() => console.log("generate document")}
-              >
-                Genereaza Document
-              </button>
-              <button
-                type="button"
                 className="bg-gray-300 disabled:bg-gray-500 disabled:hover:text-black mt-4 p-2 hover:bg-red-800 text-black duration-100 hover:text-white rounded-xl"
                 onClick={handleResetareForumlar}
               >
@@ -675,20 +667,26 @@ export default function FiseIndustrialForm() {
 
               <PDFDownloadLink
                 document={<GeneratorFisaPDF data={industrialeData} />}
-                fileName="test"
+                fileName={`FISA INDUSTRIAL 
+                - ${industrialeData.data} 
+                - Aria ${industrialeData.aria} 
+                - ${industrialeData.denumire_lucrare} ${industrialeData.zona} ${industrialeData.locaite_specifica}`.replaceAll(
+                  ".",
+                  "/"
+                )}
               >
                 {({ loading, error }) =>
                   loading ? (
                     <button
                       type="button"
-                      className="bg-gray-300 flex gap-2 items-center justify-center disabled:bg-gray-500 disabled:hover:text-black mt-4 p-2 hover:bg-red-800 text-black duration-100 hover:text-white rounded-xl"
+                      className="bg-gray-300 w-full flex mb-4 gap-2 items-center justify-center disabled:bg-gray-500 disabled:hover:text-black mt-4 p-2 hover:bg-red-800 text-black duration-100 hover:text-white rounded-xl"
                     >
                       <FaFilePdf /> Loading File
                     </button>
                   ) : (
                     <button
                       type="button"
-                      className="bg-gray-300 flex gap-2 items-center justify-center disabled:bg-gray-500 disabled:hover:text-black mt-4 p-2 hover:bg-red-800 text-black duration-100 hover:text-white rounded-xl"
+                      className="bg-gray-300 w-full mb-4 flex gap-2 items-center justify-center disabled:bg-gray-500 disabled:hover:text-black mt-4 p-2 hover:bg-red-800 text-black duration-100 hover:text-white rounded-xl"
                     >
                       <FaFilePdf /> Download PDF
                     </button>
@@ -698,11 +696,11 @@ export default function FiseIndustrialForm() {
 
               {/* PDF VIEWER */}
               {isClient ? (
-                <div className="w-full h-[60rem] md:block hidden bg-zinc-500">
+                <div className="w-full h-[60rem] bg-zinc-500">
                   <PDFViewer
                     height="100%"
                     width="100%"
-                    showToolbar={false}
+                    showToolbar={true}
                     children={<GeneratorFisaPDF data={industrialeData} />}
                   ></PDFViewer>
                 </div>
