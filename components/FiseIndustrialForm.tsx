@@ -661,7 +661,7 @@ export default function FiseIndustrialForm() {
                 disabled={readyToRequest === true ? false : true}
                 onClick={handleSubmit}
               >
-                Genereaza
+                Genereaza Descriere
               </button>
 
               <PDFDownloadLink
