@@ -57,11 +57,6 @@ export default function FiseIndustrialForm() {
   };
 
   // PDF DOWNLOAD LINK FIX
-  const [isClient, setIsClient] = useState(false);
-
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
 
   const PDFDownloadLink = dynamic(
     () => import("@react-pdf/renderer").then((mod) => mod.PDFDownloadLink),
@@ -692,16 +687,15 @@ export default function FiseIndustrialForm() {
               </PDFDownloadLink>
 
               {/* PDF VIEWER */}
-              {isClient ? (
-                <div className="w-full h-[60rem] md:block hidden bg-zinc-500">
-                  <PDFViewer
-                    height="100%"
-                    width="100%"
-                    showToolbar={true}
-                    children={<GeneratorFisaPDF data={industrialeData} />}
-                  ></PDFViewer>
-                </div>
-              ) : null}
+
+              {/* <div className="w-full h-[60rem] md:block hidden bg-zinc-500">
+                <PDFViewer
+                  height="100%"
+                  width="100%"
+                  showToolbar={true}
+                  children={<GeneratorFisaPDF data={industrialeData} />}
+                ></PDFViewer>
+              </div> */}
 
               {/* PDF VIEWER END */}
             </div>
