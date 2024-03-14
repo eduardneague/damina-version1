@@ -137,7 +137,7 @@ const industrialeStyles = StyleSheet.create({
 });
 
 const Testfile = ({ data }: Props) => {
-  console.log(data);
+  // console.log(data); // check test
 
   return (
     <>

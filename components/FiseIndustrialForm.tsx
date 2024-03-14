@@ -13,6 +13,7 @@ import Tiptap from "@/components/Tiptap";
 import GeneratorFisaPDF from "@/components/GeneratorFisaPDF";
 import { PDFViewer } from "@react-pdf/renderer";
 import dynamic from "next/dynamic";
+import { useWindowSize } from "@/hooks/useWindowSize";
 
 import { FaFilePdf } from "react-icons/fa6";
 
@@ -34,6 +35,8 @@ export default function FiseIndustrialForm() {
     reprezentant_anb: "",
     status: null,
   });
+
+  const windowSize = useWindowSize();
 
   const [pasInput, setPasInput] = useState<string>("");
   const [finalDraft, setFinalDraft] = useState<string>("");
@@ -687,15 +690,18 @@ export default function FiseIndustrialForm() {
               </PDFDownloadLink>
 
               {/* PDF VIEWER */}
-
-              {/* <div className="w-full h-[60rem] md:block hidden bg-zinc-500">
-                <PDFViewer
-                  height="100%"
-                  width="100%"
-                  showToolbar={true}
-                  children={<GeneratorFisaPDF data={industrialeData} />}
-                ></PDFViewer>
-              </div> */}
+              {windowSize.width >= 1280 ? (
+                <div className="w-full h-[60rem] md:block hidden bg-zinc-500">
+                  <PDFViewer
+                    height="100%"
+                    width="100%"
+                    showToolbar={true}
+                    children={<GeneratorFisaPDF data={industrialeData} />}
+                  ></PDFViewer>
+                </div>
+              ) : (
+                ""
+              )}
 
               {/* PDF VIEWER END */}
             </div>
