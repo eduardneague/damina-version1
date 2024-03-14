@@ -138,6 +138,7 @@ const industrialeStyles = StyleSheet.create({
 
 const Testfile = ({ data }: Props) => {
   // console.log(data); // check test
+  const renderingDelay = 1000; // 1000 = 1 second
 
   return (
     <>

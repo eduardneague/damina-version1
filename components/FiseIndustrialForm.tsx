@@ -247,6 +247,13 @@ export default function FiseIndustrialForm() {
               Generator Fise Industrial
             </h1>
           </div>
+          <button
+            type="button"
+            className="bg-gray-300 disabled:bg-gray-500 disabled:hover:text-black mt-4 p-2 hover:bg-red-800 text-black duration-100 hover:text-white rounded-xl"
+            onClick={handleResetareForumlar}
+          >
+            Resetare
+          </button>
         </div>
 
         <hr className="w-full border-gray-500 mt-4" />
@@ -654,13 +661,6 @@ export default function FiseIndustrialForm() {
                 onClick={handleSubmit}
               >
                 Genereaza
-              </button>
-              <button
-                type="button"
-                className="bg-gray-300 disabled:bg-gray-500 disabled:hover:text-black mt-4 p-2 hover:bg-red-800 text-black duration-100 hover:text-white rounded-xl"
-                onClick={handleResetareForumlar}
-              >
-                Resetare Formular
               </button>
 
               <PDFDownloadLink
