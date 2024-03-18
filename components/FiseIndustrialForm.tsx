@@ -1,24 +1,31 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 import { fisaIndustrialType } from "@/types/types";
 import LoadingAnimation from "@/components/LoadingAnimation";
+import Compressor from "compressorjs";
 
 import axios from "axios";
+import { MdDeleteForever } from "react-icons/md";
 import { HiClipboardCopy } from "react-icons/hi";
 import { useCopyToClipboard } from "@/hooks/useCopyToClipboard";
 
 import Tiptap from "@/components/Tiptap";
-import GeneratorFisaPDF from "@/components/GeneratorFisaPDF";
+import { FisaIndustrial, RaportIndustrial } from "@/components/GeneratorFise";
 import { PDFViewer } from "@react-pdf/renderer";
 import dynamic from "next/dynamic";
 import { useWindowSize } from "@/hooks/useWindowSize";
 
 import { FaFilePdf } from "react-icons/fa6";
+import { Icon } from "@iconify/react/dist/iconify.js";
 
 export default function FiseIndustrialForm() {
+  const [images, setImages] = useState<any>([]);
+  const [isDragging, setIsDragging] = useState(false);
   const [copiedText, copy] = useCopyToClipboard();
+  const [showFisa, setShowFisa] = useState<boolean>(false);
+  const [showRaport, setShowRaport] = useState<boolean>(false);
   const [pasiEnumerati, setPasiEnumerati] = useState<string[]>([]);
   const [formData, setFormData] = useState<fisaIndustrialType>({
     denumire_lucrare: "",
@@ -44,6 +51,7 @@ export default function FiseIndustrialForm() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [descriere, setDescriere] = useState<string>("");
   const [readyToRequest, setReadyToRequest] = useState<boolean>(false);
+  const fileInputRef = useRef<any>(null);
 
   const industrialeData = {
     denumire_lucrare: formData.denumire_lucrare,
@@ -65,9 +73,14 @@ export default function FiseIndustrialForm() {
     () => import("@react-pdf/renderer").then((mod) => mod.PDFDownloadLink),
     {
       ssr: false,
-      loading: () => <p>Loading...</p>,
+      loading: () => (
+        <p className="w-full flex items-center justify-center p-2 rounded-lg bg-gray-400">
+          Loading...
+        </p>
+      ),
     }
   );
+
   // End of fix
 
   useEffect(() => {
@@ -88,7 +101,6 @@ export default function FiseIndustrialForm() {
   const handleInputChange = (e: any) => {
     setPasInput(e.target.value);
   };
-
   const handleCopy = (text: string) => () => {
     copy(text)
       .then(() => {
@@ -154,6 +166,86 @@ export default function FiseIndustrialForm() {
       [e.target.name]: e.target.value,
     }));
   };
+
+  function onFileSelect(e: any) {
+    const files = e.target.files;
+    if (files.length == 0) return;
+    for (let i = 0; i < files.length; i++) {
+      if (files[i].type.split("/")[0] !== "image") continue;
+      if (!images.some((e: any) => e.name === files[i].name)) {
+        new Compressor(files[i], {
+          quality: 0.8,
+          success: (result: any) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(result);
+            reader.onload = () => {
+              console.log("console log fain: " + reader.result);
+              setImages((prevImages: any) => [
+                ...prevImages,
+                {
+                  name: files[i].name,
+                  url: reader.result,
+                },
+              ]);
+            };
+          },
+        });
+      }
+    }
+  }
+
+  function deleteImage(fileIndex: number) {
+    setImages((prevImages: any) => {
+      return prevImages.filter((_: any, i: any) => i !== fileIndex);
+    });
+  }
+
+  function uploadImages() {
+    // console.log(images);
+  }
+
+  function onDragOver(e: any) {
+    e.preventDefault();
+    setIsDragging(true);
+    e.dataTransfer.dropEffect = "copy";
+  }
+
+  function onDragLeave(e: any) {
+    e.preventDefault();
+    setIsDragging(false);
+  }
+
+  function onDrop(e: any) {
+    e.preventDefault();
+    setIsDragging(false);
+    const files = e.dataTransfer.files;
+    for (let i = 0; i < files.length; i++) {
+      if (files[i].type.split("/")[0] !== "image") continue;
+      if (!images.some((e: any) => e.name === files[i].name)) {
+        new Compressor(files[i], {
+          quality: 0.8,
+          success: (result: any) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(result);
+            reader.onload = () => {
+              console.log("console log fain: " + reader.result);
+              setImages((prevImages: any) => [
+                ...prevImages,
+                {
+                  name: files[i].name,
+                  url: reader.result,
+                },
+              ]);
+            };
+          },
+        });
+      }
+    }
+  }
+
+  function selectFiles() {
+    fileInputRef.current.click();
+  }
 
   const sendMessage = (message: string) => {
     const url = "https://api.openai.com/v1/chat/completions";
@@ -244,18 +336,31 @@ export default function FiseIndustrialForm() {
       <div className="flex w-full bg-white flex-col p-10 rounded-lg">
         <div className="flex w-full justify-between items-center">
           <div className="flex flex-col">
-            <h1 className="font-bold  2xl:text-xl text-sm">Fise Industrial</h1>
+            <h1 className="font-bold  2xl:text-xl text-sm">
+              Generator Industrial
+            </h1>
             <h1 className="font-regular  text-sm text-gray-500">
-              Generator Fise Industrial
+              Fisa + Raport Industrial
             </h1>
           </div>
-          <button
-            type="button"
-            className="bg-gray-300 disabled:bg-gray-500 disabled:hover:text-black mt-4 p-2 hover:bg-red-800 text-black duration-100 hover:text-white rounded-xl"
-            onClick={handleResetareForumlar}
-          >
-            Resetare
-          </button>
+          <div className="flex gap-2">
+            <button
+              type="button"
+              className="bg-gray-300 disabled:bg-gray-500 disabled:hover:text-black mt-4 p-2 hover:bg-red-800 text-black duration-100 hover:text-white rounded-xl"
+              onClick={handleResetareForumlar}
+            >
+              Resetare
+            </button>
+            <button
+              type="button"
+              className="bg-gray-300 xl:flex hidden disabled:bg-gray-500 disabled:hover:text-black mt-4 p-2 hover:bg-red-800 text-black duration-100 hover:text-white rounded-xl"
+              onClick={() => {
+                setShowFisa(false), setShowRaport(false);
+              }}
+            >
+              Close Previews
+            </button>
+          </div>
         </div>
 
         <hr className="w-full border-gray-500 mt-4" />
@@ -598,6 +703,78 @@ export default function FiseIndustrialForm() {
                 </button>
               </div>
             </form>
+            {/* DRAG AND DROP HERE */}
+
+            <div className="CARD mt-4 overflow-hidden">
+              <div className="flex justify-between items-center mb-2 ">
+                <h1 className="font-bold text-gray-500">Imagini Raport</h1>
+                <button
+                  type="button"
+                  className="bg-gray-300 flex disabled:bg-gray-500 disabled:hover:text-black p-2 hover:bg-red-800 text-black duration-100 hover:text-white rounded-xl"
+                  onClick={() => {
+                    setImages([]);
+                  }}
+                >
+                  Sterge Poze
+                </button>
+              </div>
+              <div
+                onDragOver={onDragOver}
+                onDragLeave={onDragLeave}
+                onDrop={onDrop}
+                className="DRAG_AREA select-none w-full gap-2 h-[10rem] flex-col flex items-center justify-center border-dashed border-4 border-green-700 bg-gray-100"
+              >
+                {isDragging ? (
+                  <></>
+                ) : (
+                  <>
+                    <span className="select-none ml-2">
+                      Image Upload (Drop)
+                    </span>
+                    <button
+                      onClick={selectFiles}
+                      className="select-none cursor-pointer bg-gray-300 p-1 rounded-lg text-black hover:bg-green-700 hover:text-white transition-all duration-100"
+                    >
+                      Browse
+                    </button>
+                  </>
+                )}
+                <input
+                  type="file"
+                  name="file"
+                  className="FILE hidden"
+                  multiple
+                  ref={fileInputRef}
+                  onChange={onFileSelect}
+                />
+              </div>
+
+              <div className="container relative overflow-y-scroll w-full h-auto flex justify-start items-start flex-wrap max-h-[200px] mt-[10px] gap-4 mb-2">
+                {images.map((image: any, index: number) => {
+                  return (
+                    <div
+                      key={index}
+                      className="image lg:w-[160px] lg:h-[160px] w-[120px] h-[120px] shadow-md relative"
+                    >
+                      <span
+                        onClick={() => deleteImage(index)}
+                        className="delete z-10 absolute w-8 h-8 cursor-pointer top-2 right-2 text-xl bg-white shadow-md flex justify-center items-center rounded-full hover:bg-red-500 transition-all duration-100"
+                      >
+                        <MdDeleteForever />
+                      </span>
+                      <img
+                        src={image.url}
+                        alt={image.name}
+                        draggable={false}
+                        className="w-full select-none h-full rounded-lg"
+                      />
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* DRAG AND DROP END HERE */}
           </div>
 
           <div className="2xl:w-1/2 w-full h-full mt-[2rem] flex flex-col">
@@ -665,42 +842,126 @@ export default function FiseIndustrialForm() {
                 Generare Descriere
               </button>
 
-              <PDFDownloadLink
-                document={<GeneratorFisaPDF data={industrialeData} />}
-                fileName={`${industrialeData.data} - Aria ${industrialeData.aria} - ${industrialeData.denumire_lucrare} ${industrialeData.zona} ${industrialeData.locaite_specifica}`.replaceAll(
-                  ".",
-                  "/"
-                )}
-              >
-                {({ loading, error }) =>
-                  loading ? (
-                    <button
-                      type="button"
-                      className="bg-gray-300 w-full flex mb-4 gap-2 items-center justify-center disabled:bg-gray-500 disabled:hover:text-black mt-4 p-2 hover:bg-red-800 text-black duration-100 hover:text-white rounded-xl"
-                    >
-                      <FaFilePdf /> Loading File
-                    </button>
-                  ) : (
-                    <button
-                      type="button"
-                      className="bg-gray-300 w-full mb-4 flex gap-2 items-center justify-center disabled:bg-gray-500 disabled:hover:text-black mt-4 p-2 hover:bg-red-800 text-black duration-100 hover:text-white rounded-xl"
-                    >
-                      <FaFilePdf /> Download PDF
-                    </button>
-                  )
-                }
-              </PDFDownloadLink>
+              <div className="flex w-full items-center justify-center gap-2">
+                <PDFDownloadLink
+                  document={<FisaIndustrial data={industrialeData} />}
+                  className="w-1/2"
+                  fileName={`${industrialeData.data} - Aria ${industrialeData.aria} - ${industrialeData.denumire_lucrare} ${industrialeData.zona} ${industrialeData.locaite_specifica}_FISA`.replaceAll(
+                    ".",
+                    "/"
+                  )}
+                >
+                  {({ loading, error }) =>
+                    loading ? (
+                      <button
+                        type="button"
+                        className="bg-gray-300 w-full flex gap-2 items-center justify-center disabled:bg-gray-500 disabled:hover:text-black p-2 hover:bg-red-800 text-black duration-100 hover:text-white rounded-xl"
+                      >
+                        <FaFilePdf /> Loading File
+                      </button>
+                    ) : (
+                      <button
+                        type="button"
+                        className="bg-gray-300 w-full flex gap-2 items-center justify-center disabled:bg-gray-500 disabled:hover:text-black p-2 hover:bg-red-800 text-black duration-100 hover:text-white rounded-xl"
+                      >
+                        <FaFilePdf /> Fisa PDF
+                      </button>
+                    )
+                  }
+                </PDFDownloadLink>
+
+                <PDFDownloadLink
+                  document={
+                    <RaportIndustrial data={industrialeData} imagini={images} />
+                  }
+                  className="w-1/2"
+                  fileName={`${industrialeData.data} - Aria ${industrialeData.aria} - ${industrialeData.denumire_lucrare} ${industrialeData.zona} ${industrialeData.locaite_specifica}_RAPORT`.replaceAll(
+                    ".",
+                    "/"
+                  )}
+                >
+                  {({ loading, error }) =>
+                    loading ? (
+                      <button
+                        type="button"
+                        className="bg-gray-300 w-full flex gap-2 items-center justify-center disabled:bg-gray-500 disabled:hover:text-black p-2 hover:bg-red-800 text-black duration-100 hover:text-white rounded-xl"
+                      >
+                        <FaFilePdf /> Loading File
+                      </button>
+                    ) : (
+                      <button
+                        type="button"
+                        className="bg-gray-300 w-full flex gap-2 items-center justify-center disabled:bg-gray-500 disabled:hover:text-black p-2 hover:bg-red-800 text-black duration-100 hover:text-white rounded-xl"
+                      >
+                        <FaFilePdf /> Raport PDF
+                      </button>
+                    )
+                  }
+                </PDFDownloadLink>
+              </div>
 
               {/* PDF VIEWER */}
-              {windowSize.width >= 1000 ? (
-                <div className="w-full h-[60rem] md:block hidden bg-zinc-500">
-                  <PDFViewer
-                    height="100%"
-                    width="100%"
-                    showToolbar={true}
-                    children={<GeneratorFisaPDF data={industrialeData} />}
-                  ></PDFViewer>
-                </div>
+              <div className="md:flex hidden gap-2 w-full">
+                <button
+                  onClick={() => {
+                    setShowFisa(true), setShowRaport(false);
+                  }}
+                  className="bg-gray-300 xl:flex hidden items-center rounded-lg gap-2 w-1/2 justify-center disabled:bg-gray-500 disabled:hover:text-black hover:bg-green-700 hover:text-white duration-100 transition-all p-2"
+                >
+                  <Icon icon="solar:document-linear" width="24" height="24" />{" "}
+                  Toggle Fisa
+                </button>
+                <button
+                  onClick={() => {
+                    setShowRaport(true), setShowFisa(false);
+                  }}
+                  className="bg-gray-300 xl:flex hidden items-center w-1/2 rounded-lg gap-2 justify-center disabled:bg-gray-500 disabled:hover:text-black hover:bg-green-700 hover:text-white duration-100 transition-all p-2"
+                >
+                  <Icon
+                    icon="material-symbols:folder-outline"
+                    width="24"
+                    height="24"
+                  />
+                  Toggle Raport
+                </button>
+              </div>
+              {showFisa === true ? (
+                <>
+                  <h1 className="font-bold text-gray-500 mt-5">
+                    Fisa Industrial (Preview)
+                  </h1>
+                  <div className="w-full h-[60rem] md:block hidden bg-zinc-500">
+                    <PDFViewer
+                      height="100%"
+                      width="100%"
+                      showToolbar={true}
+                      children={<FisaIndustrial data={industrialeData} />}
+                    ></PDFViewer>
+                  </div>
+                </>
+              ) : (
+                ""
+              )}
+
+              {showRaport === true ? (
+                <>
+                  <h1 className="font-bold text-gray-500 mt-5">
+                    Raport Industrial (Preview)
+                  </h1>
+                  <div className="w-full h-[60rem] md:block hidden bg-zinc-500">
+                    <PDFViewer
+                      height="100%"
+                      width="100%"
+                      showToolbar={true}
+                      children={
+                        <RaportIndustrial
+                          data={industrialeData}
+                          imagini={images}
+                        />
+                      }
+                    ></PDFViewer>
+                  </div>
+                </>
               ) : (
                 ""
               )}

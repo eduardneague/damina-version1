@@ -14,12 +14,11 @@ export const metadata: Metadata = {
 };
 
 const poppins = Poppins({
-  subsets: ['latin'],
-  display: 'swap',
-  variable: '--font-poppins',
-  weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900']
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-poppins",
+  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
 });
-
 
 export default function RootLayout({
   children,
@@ -29,15 +28,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`bg-white ${poppins.className}`}>
-        <div className = "flex">
-          <SideNav/>
-          <main className = "flex-1 text-sm md:text-base">
+        <div className="flex">
+          <SideNav />
+          <main className="flex-1 text-sm md:text-base">
             <MarginWidthWrapper>
-              <Header/>
-              <HeaderMobile/>
-              <PageWrapper>
-                {children}
-              </PageWrapper>
+              <Header />
+              <HeaderMobile />
+              <PageWrapper>{children}</PageWrapper>
             </MarginWidthWrapper>
           </main>
         </div>

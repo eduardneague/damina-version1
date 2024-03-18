@@ -48,3 +48,8 @@ export type IndustrialePDFData = {
     data: string;
     numar_fisa: string;
 }
+
+export type RaportImage = {
+    url: string;
+    name: string;
+}

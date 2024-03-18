@@ -7,14 +7,25 @@ import {
   Document,
   StyleSheet,
   Link,
-  Font,
-  Canvas,
 } from "@react-pdf/renderer";
-import { IndustrialePDFData } from "@/types/types";
+import { IndustrialePDFData, RaportImage } from "@/types/types";
 
-interface Props {
+interface FisaIndustrialProps {
   data: IndustrialePDFData;
 }
+
+interface FisaAdministrativProps {}
+
+interface FisaCasetaProps {}
+
+interface RaportIndustrialProps {
+  data: IndustrialePDFData;
+  imagini: RaportImage[];
+}
+
+interface RaportAdministrativProps {}
+
+interface RaportCasetaProps {}
 
 // Font.register({ family: "Times New Roman", src: "" });
 
@@ -138,7 +149,53 @@ const industrialeStyles = StyleSheet.create({
   },
 });
 
-const Testfile = ({ data }: Props) => {
+const raportIndustrialeStyles = StyleSheet.create({
+  mainContainer: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "flex-start",
+    height: "90%",
+    width: "90%",
+    padding: "20px",
+    gap: "10px",
+  },
+  pageBody: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  bold: {
+    fontFamily: "Times-Bold",
+    fontSize: "12px",
+    color: "black",
+  },
+  notBold: {
+    fontFamily: "Times-Roman",
+    fontSize: "12px",
+    color: "black",
+  },
+  imageFlexBox: {
+    display: "flex",
+    flexWrap: "wrap",
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    gap: "5px",
+    width: "100%",
+  },
+  displayedImage: {
+    border: "2px",
+    borderColor: "black",
+    borderStyle: "solid",
+    objectFit: "cover",
+    objectPosition: "center",
+    width: "160px",
+    height: "280px",
+  },
+});
+
+export const FisaIndustrial = ({ data }: FisaIndustrialProps) => {
   // console.log(data); // check test
   return (
     <>
@@ -317,4 +374,45 @@ const Testfile = ({ data }: Props) => {
   );
 };
 
-export default Testfile;
+export const FisaAdministrativ = ({}: FisaAdministrativProps) => {};
+
+export const FisaCaseta = ({}: FisaCasetaProps) => {};
+
+export const RaportIndustrial = ({ data, imagini }: RaportIndustrialProps) => {
+  console.log(imagini);
+  return (
+    <>
+      <Document>
+        <Page style={raportIndustrialeStyles.pageBody} size="A4" wrap>
+          <View style={raportIndustrialeStyles.mainContainer}>
+            <Text style={raportIndustrialeStyles.bold}>
+              Denumirea Lucrarii: {data.denumire_lucrare}
+            </Text>
+            <Text style={raportIndustrialeStyles.bold}>
+              Descrierea Activitatii:
+              <Text style={raportIndustrialeStyles.notBold}>
+                {" "}
+                {data.descriere}
+              </Text>
+            </Text>
+            <View style={raportIndustrialeStyles.imageFlexBox}>
+              {imagini.map((img: any, i: any) => {
+                return (
+                  <Image
+                    key={i}
+                    src={img.url}
+                    style={raportIndustrialeStyles.displayedImage}
+                  />
+                );
+              })}
+            </View>
+          </View>
+        </Page>
+      </Document>
+    </>
+  );
+};
+
+export const RaportAdministraitv = ({}: RaportAdministrativProps) => {};
+
+export const RaportCaseta = ({}: RaportCasetaProps) => {};

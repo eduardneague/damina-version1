@@ -17,6 +17,7 @@
     "angular-expressions": "^1.2.1",
     "axios": "^1.6.7",
     "clsx": "^2.1.0",
+    "compressorjs": "^1.2.1",
     "framer-motion": "^11.0.8",
     "lucide-react": "^0.356.0",
     "next": "14.1.0",
