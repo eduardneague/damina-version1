@@ -379,7 +379,7 @@ export const FisaAdministrativ = ({}: FisaAdministrativProps) => {};
 export const FisaCaseta = ({}: FisaCasetaProps) => {};
 
 export const RaportIndustrial = ({ data, imagini }: RaportIndustrialProps) => {
-  console.log(imagini);
+  // console.log(imagini); check data
   return (
     <>
       <Document>

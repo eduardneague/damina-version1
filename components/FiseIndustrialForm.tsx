@@ -179,7 +179,7 @@ export default function FiseIndustrialForm() {
             const reader = new FileReader();
             reader.readAsDataURL(result);
             reader.onload = () => {
-              console.log("console log fain: " + reader.result);
+              // console.log("console log fain: " + reader.result);
               setImages((prevImages: any) => [
                 ...prevImages,
                 {
@@ -228,7 +228,7 @@ export default function FiseIndustrialForm() {
             const reader = new FileReader();
             reader.readAsDataURL(result);
             reader.onload = () => {
-              console.log("console log fain: " + reader.result);
+              // console.log("console log fain: " + reader.result);
               setImages((prevImages: any) => [
                 ...prevImages,
                 {
@@ -263,13 +263,13 @@ export default function FiseIndustrialForm() {
     axios
       .post(url, data, { headers: headers })
       .then((response) => {
-        console.log(response);
+        // console.log(response);
         setDescriere(response.data.choices[0].message.content);
         setIsLoading(false);
       })
       .catch((error: any) => {
         setIsLoading(false);
-        console.log(error);
+        // console.log(error);
       });
   };
 
