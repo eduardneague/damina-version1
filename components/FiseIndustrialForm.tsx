@@ -42,10 +42,10 @@ export default function FiseIndustrialForm() {
     aria: "",
     zona: "",
     locatie_specifica: "",
-    executant: "",
+    executant: "Gabriel Balan",
     data: "",
     tip_activitate: null,
-    reprezentant_anb: "",
+    reprezentant_anb: "Anton Ciometti",
     status: null,
   });
 
