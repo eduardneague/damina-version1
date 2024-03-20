@@ -9,13 +9,13 @@ export const SIDENAV_ITEMS: SideNavItem[] = [
   },
   {
     title: "Generator",
-    path: "/fise",
+    path: "/generator",
     icon: <Icon icon="solar:document-linear" width="24" height="24" />,
     submenu: true,
     subMenuItems: [
-      { title: "Industrial", path: "/fise/industrial" },
-      { title: "Administrativ", path: "/fise/administrativ" },
-      { title: "Caseta", path: "/fise/caseta" },
+      { title: "Industrial", path: "/generator/industrial" },
+      { title: "Administrativ", path: "/generator/administrativ" },
+      { title: "Caseta", path: "/generator/caseta" },
     ],
   },
   {

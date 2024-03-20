@@ -3,17 +3,17 @@ import { Icon } from "@iconify/react";
 export const QUICK_LINKS = [
   {
     title: "Industrial",
-    path: "/fise/industrial",
+    path: "/generator/industrial",
     icon: <Icon icon="solar:document-linear" width="24" height="24" />,
   },
   {
     title: "Administrativ",
-    path: "/fise/administrativ",
+    path: "/generator/administrativ",
     icon: <Icon icon="solar:document-linear" width="24" height="24" />,
   },
   {
     title: "Caseta",
-    path: "/fise/caseta",
+    path: "/generator/caseta",
     icon: <Icon icon="solar:document-linear" width="24" height="24" />,
   },
   {

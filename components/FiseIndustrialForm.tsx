@@ -1,10 +1,16 @@
 "use client";
 
+// CONVERT IMAGES TO PNG, WORD CANT READ BASE64
+// CHECK BLOBPROVIDER FROM react-pdf (see what's inside)
+
 import { useState, useEffect, useRef } from "react";
 
 import { fisaIndustrialType } from "@/types/types";
 import LoadingAnimation from "@/components/LoadingAnimation";
 import Compressor from "compressorjs";
+
+import { FaRegCheckCircle } from "react-icons/fa";
+import { IoMdCloseCircleOutline } from "react-icons/io";
 
 import axios from "axios";
 import { MdDeleteForever } from "react-icons/md";
@@ -167,6 +173,40 @@ export default function FiseIndustrialForm() {
     }));
   };
 
+  // astazi stiu eu si Dumnezeu ce e aici.
+  // maine doar Dumnezeu
+
+  // GOOD WORKING FUNCTION
+
+  // function onFileSelect(e: any) {
+  //   const files = e.target.files;
+  //   if (files.length == 0) return;
+  //   for (let i = 0; i < files.length; i++) {
+  //     if (files[i].type.split("/")[0] !== "image") continue;
+  //     if (!images.some((e: any) => e.name === files[i].name)) {
+  //       new Compressor(files[i], {
+  //         quality: 0.8,
+  //         success: (result: any) => {
+  //           const reader = new FileReader();
+  //           reader.readAsDataURL(result);
+  //           reader.onload = () => {
+  //             // console.log("console log fain: " + reader.result);
+  //             setImages((prevImages: any) => [
+  //               ...prevImages,
+  //               {
+  //                 name: files[i].name,
+  //                 url: reader.result,
+  //               },
+  //             ]);
+  //           };
+  //         },
+  //       });
+  //     }
+  //   }
+  // }
+
+  // only png works
+
   function onFileSelect(e: any) {
     const files = e.target.files;
     if (files.length == 0) return;
@@ -175,14 +215,16 @@ export default function FiseIndustrialForm() {
       if (!images.some((e: any) => e.name === files[i].name)) {
         new Compressor(files[i], {
           quality: 0.8,
+          convertTypes: ["image/jpeg"],
           success: (result: any) => {
             const reader = new FileReader();
-            reader.readAsDataURL(result);
+            const mustBePng = new Blob([result], { type: "image/png" });
+            reader.readAsDataURL(mustBePng);
             reader.onload = () => {
-              // console.log("console log fain: " + reader.result);
               setImages((prevImages: any) => [
                 ...prevImages,
                 {
+                  type: result.type,
                   name: files[i].name,
                   url: reader.result,
                 },
@@ -194,14 +236,34 @@ export default function FiseIndustrialForm() {
     }
   }
 
+  // No compression File Select Function
+
+  // function onFileSelect_noCompressor(e: any) {
+  //   const files = e.target.files;
+  //   if (files.length == 0) return;
+  //   for (let i = 0; i < files.length; i++) {
+  //     if (files[i].type.split("/")[0] !== "image") continue;
+  //     if (!images.some((e: any) => e.name === files[i].name)) {
+  //       const reader = new FileReader();
+  //       const mustBePng = new Blob([files[i]], { type: "image/png " });
+  //       reader.readAsDataURL(mustBePng);
+  //       reader.onload = () => {
+  //         setImages((prevImages: any) => [
+  //           ...prevImages,
+  //           {
+  //             name: files[i].name,
+  //             url: reader.result,
+  //           },
+  //         ]);
+  //       };
+  //     }
+  //   }
+  // }
+
   function deleteImage(fileIndex: number) {
     setImages((prevImages: any) => {
       return prevImages.filter((_: any, i: any) => i !== fileIndex);
     });
-  }
-
-  function uploadImages() {
-    // console.log(images);
   }
 
   function onDragOver(e: any) {
@@ -215,23 +277,60 @@ export default function FiseIndustrialForm() {
     setIsDragging(false);
   }
 
+  // Old Drop function (only png but not showing)
+
+  // function onDrop(e: any) {
+  //   e.preventDefault();
+  //   setIsDragging(false);
+  //   const files = e.dataTransfer.files;
+  //   for (let i = 0; i < files.length; i++) {
+  //     if (files[i].type.split("/")[0] !== "image") continue;
+  //     if (!images.some((e: any) => e.name === files[i].name)) {
+  //       new Compressor(files[i], {
+  //         quality: 0.8,
+  //         success: (result: any) => {
+  //           const reader = new FileReader();
+  //           console.log(reader);
+  //           reader.readAsDataURL(result);
+  //           reader.onload = () => {
+  //             // console.log("console log fain: " + reader.result);
+  //             setImages((prevImages: any) => [
+  //               ...prevImages,
+  //               {
+  //                 name: files[i].name,
+  //                 url: reader.result,
+  //               },
+  //             ]);
+  //           };
+  //         },
+  //       });
+  //     }
+  //   }
+  // }
+
+  // new ondrop only png works
+  // doesnt work well
+
   function onDrop(e: any) {
     e.preventDefault();
     setIsDragging(false);
     const files = e.dataTransfer.files;
+    if (files.length == 0) return; // something bad here.
     for (let i = 0; i < files.length; i++) {
       if (files[i].type.split("/")[0] !== "image") continue;
       if (!images.some((e: any) => e.name === files[i].name)) {
         new Compressor(files[i], {
           quality: 0.8,
+          convertTypes: ["image/jpeg"],
           success: (result: any) => {
             const reader = new FileReader();
-            reader.readAsDataURL(result);
+            const mustBePng = new Blob([result], { type: "image/png" });
+            reader.readAsDataURL(mustBePng);
             reader.onload = () => {
-              // console.log("console log fain: " + reader.result);
               setImages((prevImages: any) => [
                 ...prevImages,
                 {
+                  type: result.type,
                   name: files[i].name,
                   url: reader.result,
                 },
@@ -707,7 +806,10 @@ export default function FiseIndustrialForm() {
 
             <div className="CARD mt-4 overflow-hidden">
               <div className="flex justify-between items-center mb-2 ">
-                <h1 className="font-bold text-gray-500">Imagini Raport</h1>
+                <h1 className="font-bold text-gray-500">
+                  Imagini Raport{" "}
+                  <span className="text-red-500"> (OBLIGATORIU .png) </span>
+                </h1>
                 <button
                   type="button"
                   className="bg-gray-300 flex disabled:bg-gray-500 disabled:hover:text-black p-2 hover:bg-red-800 text-black duration-100 hover:text-white rounded-xl"
@@ -754,7 +856,7 @@ export default function FiseIndustrialForm() {
                   return (
                     <div
                       key={index}
-                      className="image lg:w-[160px] lg:h-[160px] w-[120px] h-[120px] shadow-md relative"
+                      className="image lg:w-[160px] lg:h-[160px] w-[120px] h-[120px] shadow-lg relative"
                     >
                       <span
                         onClick={() => deleteImage(index)}
@@ -768,6 +870,19 @@ export default function FiseIndustrialForm() {
                         draggable={false}
                         className="w-full select-none h-full rounded-lg"
                       />
+                      {image.type === "image/png" ? (
+                        <>
+                          <div className="absolute top-2 bg-green-700 text-white font-bold rounded-lg flex gap-1 items-center justify-center shadow uppercase left-2 p-1">
+                            PNG <FaRegCheckCircle />
+                          </div>
+                        </>
+                      ) : (
+                        <>
+                          <div className="absolute top-2 bg-red-600 text-white flex justify-center items-center gap-1 font-bold rounded-lg shadow uppercase left-2 p-1">
+                            JPG <IoMdCloseCircleOutline />
+                          </div>
+                        </>
+                      )}
                     </div>
                   );
                 })}

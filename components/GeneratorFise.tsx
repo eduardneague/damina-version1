@@ -379,7 +379,7 @@ export const FisaAdministrativ = ({}: FisaAdministrativProps) => {};
 export const FisaCaseta = ({}: FisaCasetaProps) => {};
 
 export const RaportIndustrial = ({ data, imagini }: RaportIndustrialProps) => {
-  // console.log(imagini); check data
+  // console.log(imagini); // check data
   return (
     <>
       <Document>
@@ -400,7 +400,12 @@ export const RaportIndustrial = ({ data, imagini }: RaportIndustrialProps) => {
                 return (
                   <Image
                     key={i}
-                    src={img.url}
+                    src={{
+                      uri: img.url,
+                      method: "GET",
+                      headers: { "Cache-Control": "no-cache" },
+                      body: "",
+                    }}
                     style={raportIndustrialeStyles.displayedImage}
                   />
                 );
