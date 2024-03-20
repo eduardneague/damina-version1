@@ -149,8 +149,7 @@ export default function FiseIndustrialForm() {
       formData.executant.length > 0 &&
       formData.data.length > 0 &&
       formData.aria.length > 0 &&
-      formData.zona.length > 0 &&
-      formData.locatie_specifica.length > 0
+      formData.zona.length > 0
     ) {
       setReadyToRequest(true);
     } else setReadyToRequest(false);
@@ -390,10 +389,8 @@ export default function FiseIndustrialForm() {
               formData.denumire_lucrare
             }.
             Creeaza o descriere in care prezinti lucrarea, intr-un singur paragraf continuu.
-            Te rog sa incepi descrierea ca in exemplele de mai jos, aratand clar aria, zona si locatia specifica in care a fost realizata lucrarea.
-            Aria va fi: ${formData.aria}, zona va fi: ${
-      formData.zona
-    }, iar locatia specifica va fi: ${formData.locatie_specifica}  
+            Te rog sa incepi descrierea ca in exemplele de mai jos, aratand clar aria si zona in care a fost realizata lucrarea.
+            Aria va fi: ${formData.aria}, zona va fi: ${formData.zona}
             Pentru realizarea acestiei lucarii ai urmatorit urmatorii pasi: ${pasiEnumerati}, 
             Creeaza un text de maxim ${
               formData.randuri
@@ -621,31 +618,6 @@ export default function FiseIndustrialForm() {
                   className="rounded-sm bg-gray-100 focus:outline-green-600 p-2 w-full "
                 />
               </div>
-
-              <div className="mt-4">
-                <label
-                  htmlFor="locatie_specifica"
-                  className="text-gray-500 mb-2 font-bold "
-                >
-                  <div className="flex justify-between">
-                    <p>Locatie Specifica (Ex: Cladire / Bazin)</p>
-                    <span className="text-green-500 font-bold text-sm">
-                      {" "}
-                      *{" "}
-                    </span>
-                  </div>
-                </label>
-                <input
-                  id="locatie_specifica"
-                  type="text"
-                  name="locatie_specifica"
-                  value={formData.locatie_specifica}
-                  onChange={(e: any) => updateForm(e)}
-                  placeholder="Locatie Specifica"
-                  className="rounded-sm bg-gray-100 focus:outline-green-600 p-2 w-full "
-                />
-              </div>
-
               <div className="mt-4 gap-2">
                 <div className="flex justify-between">
                   <p className=" text-gray-500 mb-2 font-bold ">
