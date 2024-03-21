@@ -967,12 +967,12 @@ export default function FiseIndustrialForm() {
                               ref={provided.innerRef}
                               className={`flex justify-between hover:rounded-lg hover:shadow-md hover:bg-gray-300 p-1 hover:cursor-move items-center`}
                             >
-                              <p className="max-w-[7rem] sm:max-w-[23rem] overflow-x-hidden ">
+                              <p className="max-w-[12rem] sm:max-w-[23rem] overflow-x-hidden ">
                                 ({index + 1}) {pas}
                               </p>
                               <div className="flex gap-2">
                                 <button
-                                  className="hover:bg-green-700 duration-100 text-white rounded-full p-1"
+                                  className="hover:bg-green-700 hidden sm:block duration-100 text-white rounded-full p-1"
                                   onClick={() => {
                                     handleMovePasUp(index);
                                   }}
@@ -981,7 +981,7 @@ export default function FiseIndustrialForm() {
                                 </button>
 
                                 <button
-                                  className=" hover:bg-green-700 duration-100 text-white rounded-full p-1"
+                                  className=" hover:bg-green-700 hidden sm:block duration-100 text-white rounded-full p-1"
                                   onClick={() => {
                                     handleMovePasDown(index);
                                   }}
