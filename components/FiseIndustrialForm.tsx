@@ -4,6 +4,7 @@
 // CHECK BLOBPROVIDER FROM react-pdf (see what's inside)
 
 import { useState, useEffect, useRef } from "react";
+import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
 import { fisaIndustrialType } from "@/types/types";
 import LoadingAnimation from "@/components/LoadingAnimation";
@@ -86,7 +87,6 @@ export default function FiseIndustrialForm() {
       ),
     }
   );
-
   // End of fix
 
   useEffect(() => {
@@ -107,6 +107,7 @@ export default function FiseIndustrialForm() {
   const handleInputChange = (e: any) => {
     setPasInput(e.target.value);
   };
+
   const handleCopy = (text: string) => () => {
     copy(text)
       .then(() => {
@@ -204,36 +205,36 @@ export default function FiseIndustrialForm() {
   //   }
   // }
 
-  // only png works
+  // only png works (current one im using)
 
-  function onFileSelect(e: any) {
-    const files = e.target.files;
-    if (files.length == 0) return;
-    for (let i = 0; i < files.length; i++) {
-      if (files[i].type.split("/")[0] !== "image") continue;
-      if (!images.some((e: any) => e.name === files[i].name)) {
-        new Compressor(files[i], {
-          quality: 0.8,
-          convertTypes: ["image/jpeg"],
-          success: (result: any) => {
-            const reader = new FileReader();
-            const mustBePng = new Blob([result], { type: "image/png" });
-            reader.readAsDataURL(mustBePng);
-            reader.onload = () => {
-              setImages((prevImages: any) => [
-                ...prevImages,
-                {
-                  type: result.type,
-                  name: files[i].name,
-                  url: reader.result,
-                },
-              ]);
-            };
-          },
-        });
-      }
-    }
-  }
+  // function onFileSelect(e: any) {
+  //   const files = e.target.files;
+  //   if (files.length == 0) return;
+  //   for (let i = 0; i < files.length; i++) {
+  //     if (files[i].type.split("/")[0] !== "image") continue;
+  //     if (!images.some((e: any) => e.name === files[i].name)) {
+  //       new Compressor(files[i], {
+  //         quality: 0.8,
+  //         convertTypes: ["image/jpeg"],
+  //         success: (result: any) => {
+  //           const reader = new FileReader();
+  //           const mustBePng = new Blob([result], { type: "image/png" });
+  //           reader.readAsDataURL(mustBePng);
+  //           reader.onload = () => {
+  //             setImages((prevImages: any) => [
+  //               ...prevImages,
+  //               {
+  //                 type: result.type,
+  //                 name: files[i].name,
+  //                 url: reader.result,
+  //               },
+  //             ]);
+  //           };
+  //         },
+  //       });
+  //     }
+  //   }
+  // }
 
   // No compression File Select Function
 
@@ -258,6 +259,30 @@ export default function FiseIndustrialForm() {
   //     }
   //   }
   // }
+
+  // 21.03.2024 try
+
+  function onFileSelect(e: any) {
+    const files = e.target.files;
+    if (files.length == 0) return;
+    for (let i = 0; i < files.length; i++) {
+      if (files[i].type.split("/")[0] !== "image") continue;
+      if (!images.some((e: any) => e.name === files[i].name)) {
+        const reader = new FileReader();
+        reader.readAsDataURL(files[i]);
+        reader.onload = () => {
+          setImages((prevImages: any) => [
+            ...prevImages,
+            {
+              type: files[i].type,
+              name: files[i].name,
+              url: URL.createObjectURL(files[i]),
+            },
+          ]);
+        };
+      }
+    }
+  }
 
   function deleteImage(fileIndex: number) {
     setImages((prevImages: any) => {
@@ -377,6 +402,28 @@ export default function FiseIndustrialForm() {
     const descriere2 = descriere1.slice(0, -4);
     const descriere3 = descriere2.replace(/\r?\n|\r/g, "");
     setDescriere(descriere3);
+  };
+
+  const handleDragDrop = (results: any) => {
+    console.log(results);
+    const { source, destination, type } = results;
+
+    if (!destination) return;
+    if (
+      source.droppableId === destination.droppableId &&
+      source.index === destination.index
+    )
+      return;
+    if (type === "group") {
+      const reorderedPasiEnumerati = [...pasiEnumerati];
+      const sourceIndex = source.index;
+      const destinationIndex = destination.index;
+
+      const [removedPas] = reorderedPasiEnumerati.splice(sourceIndex, 1);
+      reorderedPasiEnumerati.splice(destinationIndex, 0, removedPas);
+
+      return setPasiEnumerati(reorderedPasiEnumerati);
+    }
   };
 
   // console.log("descriere: "  + descriere) // Check Descriere
@@ -867,22 +914,47 @@ export default function FiseIndustrialForm() {
           <div className="2xl:w-1/2 w-full h-full mt-[2rem] flex flex-col">
             <div className="flex flex-col">
               <h1 className="font-bold text-gray-500">Pasi Enumarati</h1>
-              <div className="flex flex-col gap-3 max-h-[15rem] overflow-y-scroll w-full bg-gray-100 p-2 rounded-sm select-none">
-                {pasiEnumerati.length == 0 ? "Nu exista pasi." : ""}
-                {pasiEnumerati.map((pas, i) => (
-                  <div key={i} className="flex justify-between">
-                    <p>
-                      {i + 1}. {pas}
-                    </p>
-                    <button
-                      className="bg-gray-600 hover:bg-rose-700 duration-100 text-white rounded-lg p-1"
-                      onClick={() => stergePas(i)}
+
+              {/* PASI */}
+              <DragDropContext onDragEnd={handleDragDrop}>
+                <Droppable droppableId="GFDHKGDKG" type="group">
+                  {(provided) => (
+                    <div
+                      {...provided.droppableProps}
+                      ref={provided.innerRef}
+                      className="flex flex-col gap-3 max-h-[15rem] overflow-y-scroll w-full bg-gray-100 p-2 rounded-sm select-none"
                     >
-                      Sterge
-                    </button>
-                  </div>
-                ))}
-              </div>
+                      {pasiEnumerati.length == 0 ? "Nu exista pasi." : ""}
+
+                      {pasiEnumerati.map((pas, i) => (
+                        <Draggable
+                          index={i}
+                          key={pas}
+                          draggableId={i.toString()}
+                        >
+                          {(provided) => (
+                            <div
+                              {...provided.dragHandleProps}
+                              {...provided.draggableProps}
+                              ref={provided.innerRef}
+                              className={`flex justify-between hover:rounded-lg hover:shadow-md hover:bg-gray-300 p-1 hover:cursor-move items-center`}
+                            >
+                              <p>{pas}</p>
+                              <button
+                                className="bg-gray-600 hover:bg-rose-700 duration-100 text-white rounded-lg p-1"
+                                onClick={() => stergePas(i)}
+                              >
+                                Sterge
+                              </button>
+                            </div>
+                          )}
+                        </Draggable>
+                      ))}
+                      {provided.placeholder}
+                    </div>
+                  )}
+                </Droppable>
+              </DragDropContext>
             </div>
 
             <div className="rezultat flex flex-col gap-2 mt-4">
