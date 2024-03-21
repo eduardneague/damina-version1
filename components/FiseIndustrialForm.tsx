@@ -5,10 +5,12 @@
 
 import { useState, useEffect, useRef } from "react";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import { v4 as uuidv4 } from "uuid";
 
 import { fisaIndustrialType } from "@/types/types";
 import LoadingAnimation from "@/components/LoadingAnimation";
 import Compressor from "compressorjs";
+import { FaArrowAltCircleUp, FaArrowAltCircleDown } from "react-icons/fa";
 
 import { FaRegCheckCircle } from "react-icons/fa";
 import { IoMdCloseCircleOutline } from "react-icons/io";
@@ -154,16 +156,6 @@ export default function FiseIndustrialForm() {
     ) {
       setReadyToRequest(true);
     } else setReadyToRequest(false);
-  };
-
-  const stergePas = (elem: any) => {
-    for (let i = 0; i < pasiEnumerati.length; i++) {
-      if (i === elem) {
-        setPasiEnumerati((prevPasi) =>
-          prevPasi.filter((pas, index) => index !== elem)
-        );
-      }
-    }
   };
 
   const updateForm = (e: any) => {
@@ -404,6 +396,8 @@ export default function FiseIndustrialForm() {
     setDescriere(descriere3);
   };
 
+  console.log(pasiEnumerati);
+
   const handleDragDrop = (results: any) => {
     console.log(results);
     const { source, destination, type } = results;
@@ -472,6 +466,40 @@ export default function FiseIndustrialForm() {
 
       setPasInput("");
     }
+  };
+
+  const stergePas = (elem: any) => {
+    for (let i = 0; i < pasiEnumerati.length; i++) {
+      if (i === elem) {
+        setPasiEnumerati((prevPasi) =>
+          prevPasi.filter((pas, index) => index !== elem)
+        );
+      }
+    }
+  };
+
+  const handleMovePasDown = (element: number) => {
+    const newPasi = [...pasiEnumerati];
+    for (let i = 0; i < newPasi.length; i++) {
+      if (i === element && i !== newPasi.length - 1) {
+        let thirdWheel = newPasi[i + 1];
+        newPasi[i + 1] = newPasi[i];
+        newPasi[i] = thirdWheel;
+      }
+    }
+    setPasiEnumerati(newPasi);
+  };
+
+  const handleMovePasUp = (element: number) => {
+    const newPasi = [...pasiEnumerati];
+    for (let i = 0; i < newPasi.length; i++) {
+      if (i === element && i !== 0) {
+        let thirdWheel = newPasi[i - 1];
+        newPasi[i - 1] = newPasi[i];
+        newPasi[i] = thirdWheel;
+      }
+    }
+    setPasiEnumerati(newPasi);
   };
 
   return (
@@ -917,7 +945,7 @@ export default function FiseIndustrialForm() {
 
               {/* PASI */}
               <DragDropContext onDragEnd={handleDragDrop}>
-                <Droppable droppableId="GFDHKGDKG" type="group">
+                <Droppable droppableId="GSDAGDSA" type="group">
                   {(provided) => (
                     <div
                       {...provided.droppableProps}
@@ -926,11 +954,11 @@ export default function FiseIndustrialForm() {
                     >
                       {pasiEnumerati.length == 0 ? "Nu exista pasi." : ""}
 
-                      {pasiEnumerati.map((pas, i) => (
+                      {pasiEnumerati.map((pas, index) => (
                         <Draggable
-                          index={i}
-                          key={pas}
-                          draggableId={i.toString()}
+                          index={index}
+                          key={pas.toString() + index.toString()}
+                          draggableId={pas.toString() + index.toString()}
                         >
                           {(provided) => (
                             <div
@@ -939,13 +967,35 @@ export default function FiseIndustrialForm() {
                               ref={provided.innerRef}
                               className={`flex justify-between hover:rounded-lg hover:shadow-md hover:bg-gray-300 p-1 hover:cursor-move items-center`}
                             >
-                              <p>{pas}</p>
-                              <button
-                                className="bg-gray-600 hover:bg-rose-700 duration-100 text-white rounded-lg p-1"
-                                onClick={() => stergePas(i)}
-                              >
-                                Sterge
-                              </button>
+                              <p className="max-w-[7rem] sm:max-w-[23rem] overflow-x-hidden ">
+                                ({index + 1}) {pas}
+                              </p>
+                              <div className="flex gap-2">
+                                <button
+                                  className="hover:bg-green-700 duration-100 text-white rounded-full p-1"
+                                  onClick={() => {
+                                    handleMovePasUp(index);
+                                  }}
+                                >
+                                  <FaArrowAltCircleUp className="text-2xl text-black" />
+                                </button>
+
+                                <button
+                                  className=" hover:bg-green-700 duration-100 text-white rounded-full p-1"
+                                  onClick={() => {
+                                    handleMovePasDown(index);
+                                  }}
+                                >
+                                  <FaArrowAltCircleDown className="text-2xl text-black" />
+                                </button>
+
+                                <button
+                                  className="bg-gray-600 hover:bg-rose-700 duration-100 text-white rounded-full p-1"
+                                  onClick={() => stergePas(index)}
+                                >
+                                  <IoMdCloseCircleOutline className="text-2xl" />
+                                </button>
+                              </div>
                             </div>
                           )}
                         </Draggable>
