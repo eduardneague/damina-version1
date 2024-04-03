@@ -5,7 +5,6 @@
 
 import { useState, useEffect, useRef } from "react";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
-import { v4 as uuidv4 } from "uuid";
 
 import { fisaIndustrialType } from "@/types/types";
 import LoadingAnimation from "@/components/LoadingAnimation";
@@ -252,7 +251,7 @@ export default function FiseIndustrialForm() {
   //   }
   // }
 
-  // 21.03.2024 try
+  // 21.03.2024 try (CURRENT ONE IN USE)
 
   function onFileSelect(e: any) {
     const files = e.target.files;
@@ -275,6 +274,42 @@ export default function FiseIndustrialForm() {
       }
     }
   }
+
+  // async function convertType(source: any, type: any) {
+  //   let image = await createImageBitmap(source);
+  //   let canvas = new OffscreenCanvas(image.width, image.height);
+  //   let context = canvas.getContext("2d");
+  //   context?.drawImage(image, 0, 0);
+
+  //   let result = await canvas.convertToBlob({ type });
+  //   image.close();
+  //   return result;
+  // }
+
+  // // another try i guess
+
+  // // console.log(images);
+
+  // async function onFileSelect(e: any) {
+  //   const files = e.target.files;
+  //   if (files.length == 0) return;
+  //   for (let i = 0; i < files.length; i++) {
+  //     if (files[i].type.split("/")[0] !== "image") continue;
+  //     if (!images.some((e: any) => e.name === files[i].name)) {
+  //       const convertedImage = await convertType(files[i], "image/png");
+  //       console.log("thing: ", convertedImage);
+  //       if (convertedImage)
+  //         setImages((prevImages: any) => [
+  //           ...prevImages,
+  //           {
+  //             type: files[i].type,
+  //             name: files[i].name,
+  //             url: URL.createObjectURL(convertedImage),
+  //           },
+  //         ]);
+  //     }
+  //   }
+  // }
 
   function deleteImage(fileIndex: number) {
     setImages((prevImages: any) => {
@@ -396,7 +431,7 @@ export default function FiseIndustrialForm() {
     setDescriere(descriere3);
   };
 
-  console.log(pasiEnumerati);
+  // console.log(pasiEnumerati);
 
   const handleDragDrop = (results: any) => {
     console.log(results);
@@ -430,7 +465,11 @@ export default function FiseIndustrialForm() {
               formData.denumire_lucrare
             }.
             Creeaza o descriere in care prezinti lucrarea, intr-un singur paragraf continuu.
-            Te rog sa incepi descrierea ca in exemplele de mai jos, aratand clar aria si zona in care a fost realizata lucrarea.
+            ${
+              formData.status === "NU"
+                ? 'Te rog ca descrierea sa inceapa cu "S-au continuat lucrarile..." mentionand clar aria si zona in care a fost realizata lucrarea. '
+                : "Te rog sa incepi descrierea ca in exemplele de mai jos, aratand clar aria si zona in care a fost realizata lucrarea."
+            } 
             Aria va fi: ${formData.aria}, zona va fi: ${formData.zona}
             Pentru realizarea acestiei lucarii ai urmatorit urmatorii pasi: ${pasiEnumerati}, 
             Creeaza un text de maxim ${
@@ -444,6 +483,8 @@ export default function FiseIndustrialForm() {
                 : ""
             }.
             Te rog sa mentii un ton profesional, prietenos si asemanator cu exemplul de mai jos.
+            Te rog totodata sa nu mentionezi performanta muncitorilor, de exemplu te rog sa nu adaugi lucruri precum: "Muncitori au prestat niste servicii extraordinare".
+            Important este sa cuprinzi doar gistul lucrarii si nimic altceva.
            
             Pentru un exemplu de structura a acestei descrieri si stilul de compunere, te-as ruga sa urmaresti urmatorul model de exprimare.
 
@@ -610,7 +651,7 @@ export default function FiseIndustrialForm() {
                   className="rounded-sm bg-gray-100 focus:outline-green-600 p-2 w-full "
                 />
               </div>
-
+              {/* Numar Fisa (aparent nu mai este nevoie de el asa ca il comentez)
               <div className="mt-4">
                 <label
                   htmlFor="numar_fisa"
@@ -629,7 +670,7 @@ export default function FiseIndustrialForm() {
                   placeholder="Numar Fisa"
                   className="rounded-sm bg-gray-100 focus:outline-green-600 p-2 w-full"
                 />
-              </div>
+              </div> */}
 
               <div className="mt-4">
                 <label htmlFor="data" className="text-gray-500 mb-2 font-bold ">
@@ -793,6 +834,8 @@ export default function FiseIndustrialForm() {
                 />
               </div>
 
+              {/* 
+              Detalii Descriere, i guess still nothing.
               <div className="mt-4">
                 <label
                   htmlFor="detalii"
@@ -808,7 +851,7 @@ export default function FiseIndustrialForm() {
                   placeholder="Detalii pentru generarea descrierii din fisa"
                   className="rounded-sm bg-gray-100 focus:outline-green-600 pl-2 pt-2 w-full h-[10rem]"
                 />
-              </div>
+              </div> */}
 
               <div className="mt-4 flex w-full 2xl:flex-row flex-col items-end 2xl:gap-6 gap-4">
                 <div className="flex flex-col 2xl:w-[80%] w-full">

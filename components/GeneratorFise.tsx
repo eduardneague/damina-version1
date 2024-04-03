@@ -31,7 +31,7 @@ interface RaportCasetaProps {}
 
 const industrialeStyles = StyleSheet.create({
   headerTitle: {
-    fontFamily: "Times-Roman",
+    fontFamily: "Helvetica",
     color: "rgb(0, 112, 192)",
     fontSize: "14px",
     textAlign: "center",
@@ -44,7 +44,7 @@ const industrialeStyles = StyleSheet.create({
     gap: "4px",
   },
   headerNrAndDate: {
-    fontFamily: "Times-Roman",
+    fontFamily: "Helvetica",
     color: "rgb(0, 112, 192)",
     fontSize: "14px",
     textAlign: "center",
@@ -65,7 +65,7 @@ const industrialeStyles = StyleSheet.create({
     borderRadius: "20px",
     height: "90%",
     width: "90%",
-    padding: "20px",
+    padding: "18px",
   },
   topBar: {
     display: "flex",
@@ -75,7 +75,7 @@ const industrialeStyles = StyleSheet.create({
     gap: "20px",
   },
   topBarText: {
-    fontFamily: "Times-Roman",
+    fontFamily: "Helvetica",
     color: "rgb(0, 112, 192)",
     fontSize: "14px",
   },
@@ -100,13 +100,13 @@ const industrialeStyles = StyleSheet.create({
     marginTop: "20px",
   },
   bold: {
-    fontFamily: "Times-Bold",
-    fontSize: "12px",
+    fontFamily: "Helvetica-Bold",
+    fontSize: "13px",
     color: "black",
   },
   notBold: {
-    fontFamily: "Times-Roman",
-    fontSize: "12px",
+    fontFamily: "Helvetica",
+    fontSize: "13px",
     color: "black",
   },
   bottomColumnContainer: {
@@ -116,13 +116,13 @@ const industrialeStyles = StyleSheet.create({
   },
   blueBold: {
     color: "rgb(0, 112, 192)",
-    fontFamily: "Times-Bold",
-    fontSize: "12px",
+    fontFamily: "Helvetica-Bold",
+    fontSize: "13px",
   },
   blueNotBold: {
     color: "rgb(0, 112, 192)",
-    fontFamily: "Times-Roman",
-    fontSize: "12px",
+    fontFamily: "Helvetica",
+    fontSize: "13px",
   },
   topPart: {
     display: "flex",
@@ -135,17 +135,18 @@ const industrialeStyles = StyleSheet.create({
   },
   footerText: {
     color: "rgb(0, 112, 192, 0.5)",
-    fontFamily: "Times-Bold",
+    fontFamily: "Helvetica-Bold",
     marginTop: "40px",
-    fontSize: "14px",
+    fontSize: "13px",
     position: "absolute",
     bottom: "10px",
   },
   descriereText: {
-    fontFamily: "Times-Roman",
-    fontSize: "12px",
+    fontFamily: "Helvetica",
+    fontSize: "13px",
     color: "black",
     textAlign: "justify",
+    lineHeight: "1.5px",
   },
 });
 
@@ -166,12 +167,12 @@ const raportIndustrialeStyles = StyleSheet.create({
     justifyContent: "center",
   },
   bold: {
-    fontFamily: "Times-Bold",
+    fontFamily: "Helvetica-Bold",
     fontSize: "12px",
     color: "black",
   },
   notBold: {
-    fontFamily: "Times-Roman",
+    fontFamily: "Helvetica",
     fontSize: "12px",
     color: "black",
   },
@@ -245,14 +246,9 @@ export const FisaIndustrial = ({ data }: FisaIndustrialProps) => {
                     Zona:
                     <Text style={industrialeStyles.notBold}>
                       {" "}
-                      {data.zona}, {data.locaite_specifica}{" "}
+                      {data.zona} {data.locaite_specifica}{" "}
                     </Text>
                   </Text>
-                </View>
-              </View>
-
-              <View>
-                <View style={industrialeStyles.justifyBetweenContainer}>
                   <Text style={industrialeStyles.bold}>
                     Tip Activitate:
                     <Text style={industrialeStyles.notBold}>
