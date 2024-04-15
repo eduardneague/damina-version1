@@ -1,9 +1,12 @@
-import React from 'react'
+import FisaCasetaForm from "@/components/FisaCasetaForm";
+import React from "react";
 
 const FiseCaseta = () => {
   return (
-    <div>FiseCaseta</div>
-  )
-}
+    <div>
+      <FisaCasetaForm />
+    </div>
+  );
+};
 
-export default FiseCaseta
+export default FiseCaseta;

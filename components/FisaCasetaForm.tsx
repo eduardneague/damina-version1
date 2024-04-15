@@ -6,7 +6,7 @@
 import { useState, useEffect, useRef } from "react";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
-import { fisaIndustrialType } from "@/types/types";
+import { fisaCasetaType } from "@/types/types";
 import LoadingAnimation from "@/components/LoadingAnimation";
 import Compressor from "compressorjs";
 import { FaArrowAltCircleUp, FaArrowAltCircleDown } from "react-icons/fa";
@@ -20,7 +20,7 @@ import { HiClipboardCopy } from "react-icons/hi";
 import { useCopyToClipboard } from "@/hooks/useCopyToClipboard";
 
 import Tiptap from "@/components/Tiptap";
-import { FisaIndustrial, RaportIndustrial } from "@/components/GeneratorFise";
+import { FisaCaseta, RaportCaseta } from "@/components/GeneratorFise";
 import { PDFViewer } from "@react-pdf/renderer";
 import dynamic from "next/dynamic";
 import { useWindowSize } from "@/hooks/useWindowSize";
@@ -28,14 +28,14 @@ import { useWindowSize } from "@/hooks/useWindowSize";
 import { FaFilePdf } from "react-icons/fa6";
 import { Icon } from "@iconify/react/dist/iconify.js";
 
-export default function FiseIndustrialForm() {
+export default function FisaCasetaForm() {
   const [images, setImages] = useState<any>([]);
   const [isDragging, setIsDragging] = useState(false);
   const [copiedText, copy] = useCopyToClipboard();
-  const [showFisa, setShowFisa] = useState<boolean>(true);
+  const [showFisa, setShowFisa] = useState<boolean>(false);
   const [showRaport, setShowRaport] = useState<boolean>(false);
   const [pasiEnumerati, setPasiEnumerati] = useState<string[]>([]);
-  const [formData, setFormData] = useState<fisaIndustrialType>({
+  const [formData, setFormData] = useState<any>({
     denumire_lucrare: "",
     numar_fisa: "",
     randuri: 10,
@@ -44,10 +44,10 @@ export default function FiseIndustrialForm() {
     aria: "",
     zona: "",
     locatie_specifica: "",
-    executant: "Gabriel Balan",
+    executant: "Imologomhe Dorina",
     data: "",
     tip_activitate: null,
-    reprezentant_anb: "Anton Ciometti",
+    reprezentant_anb: "Chiriacescu Mihai",
     status: null,
   });
 
@@ -61,7 +61,7 @@ export default function FiseIndustrialForm() {
   const [readyToRequest, setReadyToRequest] = useState<boolean>(false);
   const fileInputRef = useRef<any>(null);
 
-  const industrialeData = {
+  const casetaData: any = {
     denumire_lucrare: formData.denumire_lucrare
       .normalize("NFD")
       .replace(/[\u0300-\u036f]/g, ""),
@@ -158,7 +158,6 @@ export default function FiseIndustrialForm() {
     if (
       formData.denumire_lucrare.length > 0 &&
       formData.pasi.length > 0 &&
-      formData.executant.length > 0 &&
       formData.data.length > 0 &&
       formData.aria.length > 0 &&
       formData.zona.length > 0
@@ -168,7 +167,7 @@ export default function FiseIndustrialForm() {
   };
 
   const updateForm = (e: any) => {
-    setFormData((prevState) => ({
+    setFormData((prevState: any) => ({
       ...prevState,
       [e.target.name]: e.target.value,
     }));
@@ -510,7 +509,7 @@ export default function FiseIndustrialForm() {
     if (pasInput.trim() !== "") {
       setPasiEnumerati((prevItems) => [...prevItems, pasInput]);
 
-      setFormData((prevState) => ({
+      setFormData((prevState: any) => ({
         ...prevState,
         pasi: pasiEnumerati,
       }));
@@ -558,11 +557,11 @@ export default function FiseIndustrialForm() {
       <div className="flex w-full bg-white flex-col p-10 rounded-lg">
         <div className="flex w-full justify-between items-center">
           <div className="flex flex-col">
-            <h1 className="font-bold  2xl:text-xl text-sm text-green-500">
-              Generator Industrial
+            <h1 className="font-bold  2xl:text-xl text-sm text-red-500">
+              Generator Caseta
             </h1>
             <h1 className="font-regular  text-sm text-gray-500">
-              Fisa + Raport Industrial
+              Fisa + Raport Caseta
             </h1>
           </div>
           <div className="flex gap-2">
@@ -614,7 +613,7 @@ export default function FiseIndustrialForm() {
                 />
               </div>
 
-              <div className="mt-4">
+              {/* <div className="mt-4">
                 <label
                   htmlFor="executant"
                   className="text-gray-500 mb-2 font-bold "
@@ -636,9 +635,9 @@ export default function FiseIndustrialForm() {
                   placeholder="Executant"
                   className="rounded-sm bg-gray-100 focus:outline-green-600 p-2 w-full "
                 />
-              </div>
+              </div> */}
 
-              <div className="mt-4">
+              {/* <div className="mt-4">
                 <label
                   htmlFor="reprezentant_anb"
                   className="text-gray-500 mb-2 font-bold "
@@ -660,7 +659,8 @@ export default function FiseIndustrialForm() {
                   placeholder="Reprezentant ANB"
                   className="rounded-sm bg-gray-100 focus:outline-green-600 p-2 w-full "
                 />
-              </div>
+              </div> */}
+
               {/* Numar Fisa (aparent nu mai este nevoie de el asa ca il comentez)
               <div className="mt-4">
                 <label
@@ -1106,9 +1106,9 @@ export default function FiseIndustrialForm() {
 
               <div className="flex w-full items-center justify-center gap-2">
                 <PDFDownloadLink
-                  document={<FisaIndustrial data={industrialeData} />}
+                  document={<FisaCaseta data={casetaData} />}
                   className="w-1/2"
-                  fileName={`${industrialeData.data} - Aria ${industrialeData.aria} - ${industrialeData.denumire_lucrare} ${industrialeData.zona} ${industrialeData.locaite_specifica}_FISA`.replaceAll(
+                  fileName={`${casetaData.data} - Aria ${casetaData.aria} - ${casetaData.denumire_lucrare} ${casetaData.zona} ${casetaData.locaite_specifica}_FISA`.replaceAll(
                     ".",
                     "/"
                   )}
@@ -1133,11 +1133,9 @@ export default function FiseIndustrialForm() {
                 </PDFDownloadLink>
 
                 <PDFDownloadLink
-                  document={
-                    <RaportIndustrial data={industrialeData} imagini={images} />
-                  }
+                  document={<RaportCaseta data={casetaData} imagini={images} />}
                   className="w-1/2"
-                  fileName={`${industrialeData.data} - Aria ${industrialeData.aria} - ${industrialeData.denumire_lucrare} ${industrialeData.zona} ${industrialeData.locaite_specifica}_RAPORT`.replaceAll(
+                  fileName={`${casetaData.data} - Aria ${casetaData.aria} - ${casetaData.denumire_lucrare} ${casetaData.zona} ${casetaData.locaite_specifica}_RAPORT`.replaceAll(
                     ".",
                     "/"
                   )}
@@ -1197,7 +1195,7 @@ export default function FiseIndustrialForm() {
                       height="100%"
                       width="100%"
                       showToolbar={true}
-                      children={<FisaIndustrial data={industrialeData} />}
+                      children={<FisaCaseta data={casetaData} />}
                     ></PDFViewer>
                   </div>
                 </>
@@ -1216,10 +1214,7 @@ export default function FiseIndustrialForm() {
                       width="100%"
                       showToolbar={true}
                       children={
-                        <RaportIndustrial
-                          data={industrialeData}
-                          imagini={images}
-                        />
+                        <RaportCaseta data={casetaData} imagini={images} />
                       }
                     ></PDFViewer>
                   </div>

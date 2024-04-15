@@ -1,9 +1,12 @@
-import React from 'react'
+import FisaAdministrativForm from "@/components/FisaAdministrativForm";
+import React from "react";
 
 const FiseAdministrativ = () => {
   return (
-    <div>FiseAdministrativ</div>
-  )
-}
+    <div>
+      <FisaAdministrativForm />
+    </div>
+  );
+};
 
-export default FiseAdministrativ
+export default FiseAdministrativ;
