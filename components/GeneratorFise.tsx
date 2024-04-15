@@ -518,6 +518,52 @@ const raportCasetaStyles = StyleSheet.create({
   },
 });
 
+const raportAdministrativStyles = StyleSheet.create({
+  mainContainer: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "flex-start",
+    height: "90%",
+    width: "90%",
+    padding: "20px",
+    gap: "10px",
+  },
+  pageBody: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  bold: {
+    fontFamily: "Times-Bold",
+    fontSize: "12px",
+    color: "black",
+  },
+  notBold: {
+    fontFamily: "Times-Roman",
+    fontSize: "12px",
+    color: "black",
+  },
+  imageFlexBox: {
+    display: "flex",
+    flexWrap: "wrap",
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    gap: "5px",
+    width: "100%",
+  },
+  displayedImage: {
+    border: "2px",
+    borderColor: "black",
+    borderStyle: "solid",
+    objectFit: "cover",
+    objectPosition: "center",
+    width: "160px",
+    height: "280px",
+  },
+});
+
 const raportIndustrialeStyles = StyleSheet.create({
   mainContainer: {
     display: "flex",
@@ -1180,16 +1226,19 @@ export const RaportAdministrativ = ({
   return (
     <>
       <Document>
-        <Page style={raportCasetaStyles.pageBody} size="A4" wrap>
-          <View style={raportCasetaStyles.mainContainer}>
-            <Text style={raportCasetaStyles.bold}>
+        <Page style={raportAdministrativStyles.pageBody} size="A4" wrap>
+          <View style={raportAdministrativStyles.mainContainer}>
+            <Text style={raportAdministrativStyles.bold}>
               Denumirea Lucrarii: {data.denumire_lucrare}
             </Text>
-            <Text style={raportCasetaStyles.bold}>
+            <Text style={raportAdministrativStyles.bold}>
               Descrierea Activitatii:
-              <Text style={raportCasetaStyles.notBold}> {data.descriere}</Text>
+              <Text style={raportAdministrativStyles.notBold}>
+                {" "}
+                {data.descriere}
+              </Text>
             </Text>
-            <View style={raportCasetaStyles.imageFlexBox}>
+            <View style={raportAdministrativStyles.imageFlexBox}>
               {imagini.map((img: any, i: any) => {
                 return (
                   <Image
@@ -1200,7 +1249,7 @@ export const RaportAdministrativ = ({
                       headers: { "Cache-Control": "no-cache" },
                       body: "",
                     }}
-                    style={raportCasetaStyles.displayedImage}
+                    style={raportAdministrativStyles.displayedImage}
                   />
                 );
               })}
