@@ -21,7 +21,6 @@ import { useCopyToClipboard } from "@/hooks/useCopyToClipboard";
 
 import Tiptap from "@/components/Tiptap";
 import { FisaCaseta, RaportCaseta } from "@/components/GeneratorFise";
-import { PDFViewer } from "@react-pdf/renderer";
 import dynamic from "next/dynamic";
 import { useWindowSize } from "@/hooks/useWindowSize";
 
@@ -98,6 +97,14 @@ export default function FisaCasetaForm() {
       ),
     }
   );
+  
+const PDFViewer = dynamic(
+  () => import("@react-pdf/renderer").then((mod) => mod.PDFViewer),
+  {
+    ssr: false,
+    loading: () => <p>Loading...</p>,
+  },
+);
   // End of fix
 
   useEffect(() => {
