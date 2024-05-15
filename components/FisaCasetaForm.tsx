@@ -97,14 +97,14 @@ export default function FisaCasetaForm() {
       ),
     }
   );
-  
-const PDFViewer = dynamic(
-  () => import("@react-pdf/renderer").then((mod) => mod.PDFViewer),
-  {
-    ssr: false,
-    loading: () => <p>Loading...</p>,
-  },
-);
+
+  const PDFViewer = dynamic(
+    () => import("@react-pdf/renderer").then((mod) => mod.PDFViewer),
+    {
+      ssr: false,
+      loading: () => <p>Loading...</p>,
+    }
+  );
   // End of fix
 
   useEffect(() => {
@@ -382,29 +382,22 @@ const PDFViewer = dynamic(
     e.preventDefault();
     setIsDragging(false);
     const files = e.dataTransfer.files;
-    if (files.length == 0) return; // something bad here.
+    if (files.length == 0) return;
     for (let i = 0; i < files.length; i++) {
       if (files[i].type.split("/")[0] !== "image") continue;
       if (!images.some((e: any) => e.name === files[i].name)) {
-        new Compressor(files[i], {
-          quality: 0.8,
-          convertTypes: ["image/jpeg"],
-          success: (result: any) => {
-            const reader = new FileReader();
-            const mustBePng = new Blob([result], { type: "image/png" });
-            reader.readAsDataURL(mustBePng);
-            reader.onload = () => {
-              setImages((prevImages: any) => [
-                ...prevImages,
-                {
-                  type: result.type,
-                  name: files[i].name,
-                  url: reader.result,
-                },
-              ]);
-            };
-          },
-        });
+        const reader = new FileReader();
+        reader.readAsDataURL(files[i]);
+        reader.onload = () => {
+          setImages((prevImages: any) => [
+            ...prevImages,
+            {
+              type: files[i].type,
+              name: files[i].name,
+              url: URL.createObjectURL(files[i]),
+            },
+          ]);
+        };
       }
     }
   }
