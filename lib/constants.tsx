@@ -26,6 +26,7 @@ export const SIDENAV_ITEMS: SideNavItem[] = [
     subMenuItems: [
       { title: "Lucrari", path: "/descrieri/lucrari" },
       { title: "Constatari", path: "/descrieri/constatari" },
+      { title: "Materiale", path: "/descrieri/materiale" },
     ],
   },
   {

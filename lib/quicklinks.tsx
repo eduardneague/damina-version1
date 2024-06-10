@@ -27,6 +27,11 @@ export const QUICK_LINKS = [
     icon: <Icon icon="mdi:text" width="24" height="24" />,
   },
   {
+    title: "Descriere Materiale (MCA)",
+    path: "/descrieri/materiale",
+    icon: <Icon icon="mdi:text" width="24" height="24" />,
+  },
+  {
     title: "Setari",
     path: "/setari",
     icon: <Icon icon="lucide:settings" width="24" height="24" />,
