@@ -130,7 +130,7 @@ export default function DescriereMateriale() {
         <div className="flex w-full justify-between items-center">
           <div className="flex flex-col">
             <h1 className="font-bold 2xl:text-xl text-sm">
-              Descrieri Materiale (MCA)
+              Descrieri Materiale (MCA) - aka Costel
             </h1>
             <h1 className="font-regular text-sm text-gray-500">
               Generator Descriere Materiale
