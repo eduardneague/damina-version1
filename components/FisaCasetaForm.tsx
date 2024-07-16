@@ -43,7 +43,7 @@ export default function FisaCasetaForm() {
     aria: "",
     zona: "",
     locatie_specifica: "",
-    executant: "Imologomhe Dorina",
+    executant: "Nitu Cristian-Dragos",
     data: "",
     tip_activitate: null,
     reprezentant_anb: "Chiriacescu Mihai",
