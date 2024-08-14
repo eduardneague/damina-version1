@@ -477,7 +477,7 @@ const raportCasetaStyles = StyleSheet.create({
     display: "flex",
     flexDirection: "column",
     alignItems: "flex-start",
-    height: "90%",
+    height: "98%",
     width: "90%",
     padding: "20px",
     gap: "10px",

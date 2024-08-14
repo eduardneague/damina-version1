@@ -190,90 +190,6 @@ export default function FisaAdministrativForm() {
   // astazi stiu eu si Dumnezeu ce e aici.
   // maine doar Dumnezeu
 
-  // GOOD WORKING FUNCTION
-
-  // function onFileSelect(e: any) {
-  //   const files = e.target.files;
-  //   if (files.length == 0) return;
-  //   for (let i = 0; i < files.length; i++) {
-  //     if (files[i].type.split("/")[0] !== "image") continue;
-  //     if (!images.some((e: any) => e.name === files[i].name)) {
-  //       new Compressor(files[i], {
-  //         quality: 0.8,
-  //         success: (result: any) => {
-  //           const reader = new FileReader();
-  //           reader.readAsDataURL(result);
-  //           reader.onload = () => {
-  //             // console.log("console log fain: " + reader.result);
-  //             setImages((prevImages: any) => [
-  //               ...prevImages,
-  //               {
-  //                 name: files[i].name,
-  //                 url: reader.result,
-  //               },
-  //             ]);
-  //           };
-  //         },
-  //       });
-  //     }
-  //   }
-  // }
-
-  // only png works (current one im using)
-
-  // function onFileSelect(e: any) {
-  //   const files = e.target.files;
-  //   if (files.length == 0) return;
-  //   for (let i = 0; i < files.length; i++) {
-  //     if (files[i].type.split("/")[0] !== "image") continue;
-  //     if (!images.some((e: any) => e.name === files[i].name)) {
-  //       new Compressor(files[i], {
-  //         quality: 0.8,
-  //         convertTypes: ["image/jpeg"],
-  //         success: (result: any) => {
-  //           const reader = new FileReader();
-  //           const mustBePng = new Blob([result], { type: "image/png" });
-  //           reader.readAsDataURL(mustBePng);
-  //           reader.onload = () => {
-  //             setImages((prevImages: any) => [
-  //               ...prevImages,
-  //               {
-  //                 type: result.type,
-  //                 name: files[i].name,
-  //                 url: reader.result,
-  //               },
-  //             ]);
-  //           };
-  //         },
-  //       });
-  //     }
-  //   }
-  // }
-
-  // No compression File Select Function
-
-  // function onFileSelect_noCompressor(e: any) {
-  //   const files = e.target.files;
-  //   if (files.length == 0) return;
-  //   for (let i = 0; i < files.length; i++) {
-  //     if (files[i].type.split("/")[0] !== "image") continue;
-  //     if (!images.some((e: any) => e.name === files[i].name)) {
-  //       const reader = new FileReader();
-  //       const mustBePng = new Blob([files[i]], { type: "image/png " });
-  //       reader.readAsDataURL(mustBePng);
-  //       reader.onload = () => {
-  //         setImages((prevImages: any) => [
-  //           ...prevImages,
-  //           {
-  //             name: files[i].name,
-  //             url: reader.result,
-  //           },
-  //         ]);
-  //       };
-  //     }
-  //   }
-  // }
-
   // 21.03.2024 try (CURRENT ONE IN USE)
 
   function onFileSelect(e: any) {
@@ -298,42 +214,6 @@ export default function FisaAdministrativForm() {
     }
   }
 
-  // async function convertType(source: any, type: any) {
-  //   let image = await createImageBitmap(source);
-  //   let canvas = new OffscreenCanvas(image.width, image.height);
-  //   let context = canvas.getContext("2d");
-  //   context?.drawImage(image, 0, 0);
-
-  //   let result = await canvas.convertToBlob({ type });
-  //   image.close();
-  //   return result;
-  // }
-
-  // // another try i guess
-
-  // // console.log(images);
-
-  // async function onFileSelect(e: any) {
-  //   const files = e.target.files;
-  //   if (files.length == 0) return;
-  //   for (let i = 0; i < files.length; i++) {
-  //     if (files[i].type.split("/")[0] !== "image") continue;
-  //     if (!images.some((e: any) => e.name === files[i].name)) {
-  //       const convertedImage = await convertType(files[i], "image/png");
-  //       console.log("thing: ", convertedImage);
-  //       if (convertedImage)
-  //         setImages((prevImages: any) => [
-  //           ...prevImages,
-  //           {
-  //             type: files[i].type,
-  //             name: files[i].name,
-  //             url: URL.createObjectURL(convertedImage),
-  //           },
-  //         ]);
-  //     }
-  //   }
-  // }
-
   function deleteImage(fileIndex: number) {
     setImages((prevImages: any) => {
       return prevImages.filter((_: any, i: any) => i !== fileIndex);
@@ -350,40 +230,6 @@ export default function FisaAdministrativForm() {
     e.preventDefault();
     setIsDragging(false);
   }
-
-  // Old Drop function (only png but not showing)
-
-  // function onDrop(e: any) {
-  //   e.preventDefault();
-  //   setIsDragging(false);
-  //   const files = e.dataTransfer.files;
-  //   for (let i = 0; i < files.length; i++) {
-  //     if (files[i].type.split("/")[0] !== "image") continue;
-  //     if (!images.some((e: any) => e.name === files[i].name)) {
-  //       new Compressor(files[i], {
-  //         quality: 0.8,
-  //         success: (result: any) => {
-  //           const reader = new FileReader();
-  //           console.log(reader);
-  //           reader.readAsDataURL(result);
-  //           reader.onload = () => {
-  //             // console.log("console log fain: " + reader.result);
-  //             setImages((prevImages: any) => [
-  //               ...prevImages,
-  //               {
-  //                 name: files[i].name,
-  //                 url: reader.result,
-  //               },
-  //             ]);
-  //           };
-  //         },
-  //       });
-  //     }
-  //   }
-  // }
-
-  // new ondrop only png works
-  // doesnt work well
 
   function onDrop(e: any) {
     e.preventDefault();
