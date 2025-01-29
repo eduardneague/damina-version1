@@ -180,95 +180,6 @@ export default function FisaCasetaForm() {
     }));
   };
 
-  // astazi stiu eu si Dumnezeu ce e aici.
-  // maine doar Dumnezeu
-
-  // GOOD WORKING FUNCTION
-
-  // function onFileSelect(e: any) {
-  //   const files = e.target.files;
-  //   if (files.length == 0) return;
-  //   for (let i = 0; i < files.length; i++) {
-  //     if (files[i].type.split("/")[0] !== "image") continue;
-  //     if (!images.some((e: any) => e.name === files[i].name)) {
-  //       new Compressor(files[i], {
-  //         quality: 0.8,
-  //         success: (result: any) => {
-  //           const reader = new FileReader();
-  //           reader.readAsDataURL(result);
-  //           reader.onload = () => {
-  //             // console.log("console log fain: " + reader.result);
-  //             setImages((prevImages: any) => [
-  //               ...prevImages,
-  //               {
-  //                 name: files[i].name,
-  //                 url: reader.result,
-  //               },
-  //             ]);
-  //           };
-  //         },
-  //       });
-  //     }
-  //   }
-  // }
-
-  // only png works (current one im using)
-
-  // function onFileSelect(e: any) {
-  //   const files = e.target.files;
-  //   if (files.length == 0) return;
-  //   for (let i = 0; i < files.length; i++) {
-  //     if (files[i].type.split("/")[0] !== "image") continue;
-  //     if (!images.some((e: any) => e.name === files[i].name)) {
-  //       new Compressor(files[i], {
-  //         quality: 0.8,
-  //         convertTypes: ["image/jpeg"],
-  //         success: (result: any) => {
-  //           const reader = new FileReader();
-  //           const mustBePng = new Blob([result], { type: "image/png" });
-  //           reader.readAsDataURL(mustBePng);
-  //           reader.onload = () => {
-  //             setImages((prevImages: any) => [
-  //               ...prevImages,
-  //               {
-  //                 type: result.type,
-  //                 name: files[i].name,
-  //                 url: reader.result,
-  //               },
-  //             ]);
-  //           };
-  //         },
-  //       });
-  //     }
-  //   }
-  // }
-
-  // No compression File Select Function
-
-  // function onFileSelect_noCompressor(e: any) {
-  //   const files = e.target.files;
-  //   if (files.length == 0) return;
-  //   for (let i = 0; i < files.length; i++) {
-  //     if (files[i].type.split("/")[0] !== "image") continue;
-  //     if (!images.some((e: any) => e.name === files[i].name)) {
-  //       const reader = new FileReader();
-  //       const mustBePng = new Blob([files[i]], { type: "image/png " });
-  //       reader.readAsDataURL(mustBePng);
-  //       reader.onload = () => {
-  //         setImages((prevImages: any) => [
-  //           ...prevImages,
-  //           {
-  //             name: files[i].name,
-  //             url: reader.result,
-  //           },
-  //         ]);
-  //       };
-  //     }
-  //   }
-  // }
-
-  // 21.03.2024 try (CURRENT ONE IN USE)
-
   function onFileSelect(e: any) {
     const files = e.target.files;
     if (files.length == 0) return;
@@ -291,42 +202,6 @@ export default function FisaCasetaForm() {
     }
   }
 
-  // async function convertType(source: any, type: any) {
-  //   let image = await createImageBitmap(source);
-  //   let canvas = new OffscreenCanvas(image.width, image.height);
-  //   let context = canvas.getContext("2d");
-  //   context?.drawImage(image, 0, 0);
-
-  //   let result = await canvas.convertToBlob({ type });
-  //   image.close();
-  //   return result;
-  // }
-
-  // // another try i guess
-
-  // // console.log(images);
-
-  // async function onFileSelect(e: any) {
-  //   const files = e.target.files;
-  //   if (files.length == 0) return;
-  //   for (let i = 0; i < files.length; i++) {
-  //     if (files[i].type.split("/")[0] !== "image") continue;
-  //     if (!images.some((e: any) => e.name === files[i].name)) {
-  //       const convertedImage = await convertType(files[i], "image/png");
-  //       console.log("thing: ", convertedImage);
-  //       if (convertedImage)
-  //         setImages((prevImages: any) => [
-  //           ...prevImages,
-  //           {
-  //             type: files[i].type,
-  //             name: files[i].name,
-  //             url: URL.createObjectURL(convertedImage),
-  //           },
-  //         ]);
-  //     }
-  //   }
-  // }
-
   function deleteImage(fileIndex: number) {
     setImages((prevImages: any) => {
       return prevImages.filter((_: any, i: any) => i !== fileIndex);
@@ -343,40 +218,6 @@ export default function FisaCasetaForm() {
     e.preventDefault();
     setIsDragging(false);
   }
-
-  // Old Drop function (only png but not showing)
-
-  // function onDrop(e: any) {
-  //   e.preventDefault();
-  //   setIsDragging(false);
-  //   const files = e.dataTransfer.files;
-  //   for (let i = 0; i < files.length; i++) {
-  //     if (files[i].type.split("/")[0] !== "image") continue;
-  //     if (!images.some((e: any) => e.name === files[i].name)) {
-  //       new Compressor(files[i], {
-  //         quality: 0.8,
-  //         success: (result: any) => {
-  //           const reader = new FileReader();
-  //           console.log(reader);
-  //           reader.readAsDataURL(result);
-  //           reader.onload = () => {
-  //             // console.log("console log fain: " + reader.result);
-  //             setImages((prevImages: any) => [
-  //               ...prevImages,
-  //               {
-  //                 name: files[i].name,
-  //                 url: reader.result,
-  //               },
-  //             ]);
-  //           };
-  //         },
-  //       });
-  //     }
-  //   }
-  // }
-
-  // new ondrop only png works
-  // doesnt work well
 
   function onDrop(e: any) {
     e.preventDefault();
@@ -613,75 +454,6 @@ export default function FisaCasetaForm() {
                 />
               </div>
 
-              {/* <div className="mt-4">
-                <label
-                  htmlFor="executant"
-                  className="text-gray-500 mb-2 font-bold "
-                >
-                  <div className="flex justify-between">
-                    <p>Executant</p>
-                    <span className="text-green-500 font-bold text-sm">
-                      {" "}
-                      *{" "}
-                    </span>
-                  </div>
-                </label>
-                <input
-                  id="executant"
-                  type="text"
-                  name="executant"
-                  value={formData.executant}
-                  onChange={(e: any) => updateForm(e)}
-                  placeholder="Executant"
-                  className="rounded-sm bg-gray-100 focus:outline-green-600 p-2 w-full "
-                />
-              </div> */}
-
-              {/* <div className="mt-4">
-                <label
-                  htmlFor="reprezentant_anb"
-                  className="text-gray-500 mb-2 font-bold "
-                >
-                  <div className="flex justify-between">
-                    <p>Reprezentant ANB</p>
-                    <span className="text-green-500 font-bold text-sm">
-                      {" "}
-                      *{" "}
-                    </span>
-                  </div>
-                </label>
-                <input
-                  id="reprezentant_anb"
-                  type="text"
-                  name="reprezentant_anb"
-                  value={formData.reprezentant_anb}
-                  onChange={(e: any) => updateForm(e)}
-                  placeholder="Reprezentant ANB"
-                  className="rounded-sm bg-gray-100 focus:outline-green-600 p-2 w-full "
-                />
-              </div> */}
-
-              {/* Numar Fisa (aparent nu mai este nevoie de el asa ca il comentez)
-              <div className="mt-4">
-                <label
-                  htmlFor="numar_fisa"
-                  className="text-gray-500 mb-2 font-bold "
-                >
-                  <div className="flex justify-between">
-                    <p>Numar Fisa</p>
-                  </div>
-                </label>
-                <input
-                  id="numar_fisa"
-                  type="text"
-                  name="numar_fisa"
-                  value={formData.numar_fisa}
-                  onChange={(e: any) => updateForm(e)}
-                  placeholder="Numar Fisa"
-                  className="rounded-sm bg-gray-100 focus:outline-green-600 p-2 w-full"
-                />
-              </div> */}
-
               <div className="mt-4">
                 <label htmlFor="data" className="text-gray-500 mb-2 font-bold ">
                   <div className="flex justify-between">
@@ -843,25 +615,6 @@ export default function FisaCasetaForm() {
                   className="rounded-sm bg-gray-100 focus:outline-green-600 p-2 w-full "
                 />
               </div>
-
-              {/* 
-              Detalii Descriere, i guess still nothing.
-              <div className="mt-4">
-                <label
-                  htmlFor="detalii"
-                  className="text-gray-500 mb-2 font-bold "
-                >
-                  Detalii Descriere
-                </label>
-                <textarea
-                  id="detalii"
-                  name="detalii"
-                  value={formData.detalii}
-                  onChange={(e: any) => updateForm(e)}
-                  placeholder="Detalii pentru generarea descrierii din fisa"
-                  className="rounded-sm bg-gray-100 focus:outline-green-600 pl-2 pt-2 w-full h-[10rem]"
-                />
-              </div> */}
 
               <div className="mt-4 flex w-full 2xl:flex-row flex-col items-end 2xl:gap-6 gap-4">
                 <div className="flex flex-col 2xl:w-[80%] w-full">

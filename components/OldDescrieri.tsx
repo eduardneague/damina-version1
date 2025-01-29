@@ -7,6 +7,9 @@ import LoadingAnimation from "@/components/LoadingAnimation";
 import { HiClipboardCopy } from "react-icons/hi";
 import { useCopyToClipboard } from "@/hooks/useCopyToClipboard";
 import Tiptap from "./Tiptap";
+import { FaArrowAltCircleDown, FaArrowAltCircleUp } from "react-icons/fa";
+import { IoMdCloseCircleOutline } from "react-icons/io";
+import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 
 export default function OldDescrieri() {
   const [copiedText, copy] = useCopyToClipboard();
@@ -42,7 +45,8 @@ export default function OldDescrieri() {
   const [descriere, setDescriere] = useState<string>("");
   const [finalDraft, setFinalDraft] = useState<string>("");
   const [readyToRequest, setReadyToRequest] = useState<boolean>(false);
-
+  const [editIndex, setEditIndex] = useState<number | null>(null); // Track which step to edit
+  const [editPas, setEditPas] = useState<string>(""); // The edited value of the selected step
   useEffect(() => {
     handleValidation();
   }, [formData]);
@@ -120,6 +124,74 @@ export default function OldDescrieri() {
     const descriere1 = newDescriptrion.slice(3);
     const descriere2 = descriere1.slice(0, -4);
     setDescriere(descriere2);
+  };
+
+  const handleEditPas = (index: number) => {
+    setEditIndex(index);
+    setEditPas(pasiEnumerati[index]); // Set current step text for editing
+  };
+
+  const handleUpdatePas = () => {
+    if (editIndex !== null && editPas.trim() !== "") {
+      const updatedPasi = [...pasiEnumerati];
+      updatedPasi[editIndex] = editPas; // Update the specific step
+      setPasiEnumerati(updatedPasi);
+      setEditIndex(null); // Clear the edit mode
+      setEditPas(""); // Clear the input
+    }
+  };
+
+  const handleMovePasDown = (element: number) => {
+    const newPasi = [...pasiEnumerati];
+    for (let i = 0; i < newPasi.length; i++) {
+      if (i === element && i !== newPasi.length - 1) {
+        let thirdWheel = newPasi[i + 1];
+        newPasi[i + 1] = newPasi[i];
+        newPasi[i] = thirdWheel;
+      }
+    }
+    setPasiEnumerati(newPasi);
+  };
+
+  const handleMovePasUp = (element: number) => {
+    const newPasi = [...pasiEnumerati];
+    for (let i = 0; i < newPasi.length; i++) {
+      if (i === element && i !== 0) {
+        let thirdWheel = newPasi[i - 1];
+        newPasi[i - 1] = newPasi[i];
+        newPasi[i] = thirdWheel;
+      }
+    }
+    setPasiEnumerati(newPasi);
+    console.log(pasiEnumerati);
+  };
+
+  const handleDragDrop = (results: any) => {
+    console.log(results);
+    const { source, destination, type } = results;
+
+    if (!destination) return;
+    if (
+      source.droppableId === destination.droppableId &&
+      source.index === destination.index
+    )
+      return;
+    if (type === "group") {
+      const reorderedPasiEnumerati = [...pasiEnumerati];
+      const sourceIndex = source.index;
+      const destinationIndex = destination.index;
+
+      const [removedPas] = reorderedPasiEnumerati.splice(sourceIndex, 1);
+      reorderedPasiEnumerati.splice(destinationIndex, 0, removedPas);
+
+      return setPasiEnumerati(reorderedPasiEnumerati);
+    }
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter") {
+      handleUpdatePas();
+    }
   };
 
   const handleSubmit = (e: any) => {
@@ -313,22 +385,96 @@ export default function OldDescrieri() {
           <div className="2xl:w-1/2 w-full h-full mt-[2rem] flex flex-col">
             <div className="flex flex-col">
               <h1 className="font-bold text-gray-500">Pasi Enumarati</h1>
-              <div className="flex flex-col gap-3 max-h-[15rem] overflow-y-scroll w-full bg-gray-100 p-2 rounded-sm">
-                {pasiEnumerati.length == 0 ? "Nu exista pasi." : ""}
-                {pasiEnumerati.map((pas, i) => (
-                  <div key={i} className="flex justify-between">
-                    <p>
-                      {i + 1}. {pas}
-                    </p>
-                    <button
-                      className="bg-gray-600 hover:bg-rose-700 duration-100 text-white rounded-lg p-1"
-                      onClick={() => stergePas(i)}
+
+              <DragDropContext onDragEnd={handleDragDrop}>
+                <Droppable droppableId="GSDAGDSA" type="group">
+                  {(provided) => (
+                    <div
+                      {...provided.droppableProps}
+                      ref={provided.innerRef}
+                      className="flex flex-col gap-3 max-h-[15rem] overflow-y-scroll w-full bg-gray-100 p-2 rounded-sm select-none"
                     >
-                      Sterge
-                    </button>
-                  </div>
-                ))}
-              </div>
+                      {pasiEnumerati.length == 0 ? "Nu exista pasi." : ""}
+
+                      {pasiEnumerati.map((pas, index) => (
+                        <Draggable
+                          index={index}
+                          key={pas.toString() + index.toString()}
+                          draggableId={pas.toString() + index.toString()}
+                        >
+                          {(provided) => (
+                            <div
+                              {...provided.dragHandleProps}
+                              {...provided.draggableProps}
+                              ref={provided.innerRef}
+                              className="flex justify-between hover:rounded-lg hover:shadow-md hover:bg-gray-300 p-1 hover:cursor-move items-center"
+                            >
+                              <p className="max-w-[12rem] sm:max-w-[23rem] overflow-x-hidden ">
+                                <span className="font-bold">{index + 1}) </span>
+                                {pas}
+                              </p>
+                              <div className="flex gap-2">
+                                <button
+                                  className="hover:bg-green-700 hidden sm:block duration-100 text-white rounded-full p-1"
+                                  onClick={() => {
+                                    handleMovePasUp(index);
+                                  }}
+                                >
+                                  <FaArrowAltCircleUp className="text-2xl text-black" />
+                                </button>
+
+                                <button
+                                  className=" hover:bg-green-700 hidden sm:block duration-100 text-white rounded-full p-1"
+                                  onClick={() => {
+                                    handleMovePasDown(index);
+                                  }}
+                                >
+                                  <FaArrowAltCircleDown className="text-2xl text-black" />
+                                </button>
+
+                                <button
+                                  className="bg-gray-600 hover:bg-rose-700 duration-100 text-white rounded-full p-1"
+                                  onClick={() => stergePas(index)}
+                                >
+                                  <IoMdCloseCircleOutline className="text-2xl" />
+                                </button>
+
+                                {/* Edit Button */}
+                                <button
+                                  className="bg-blue-900 text-white p-1 rounded-md"
+                                  onClick={() => handleEditPas(index)}
+                                >
+                                  Edit
+                                </button>
+                              </div>
+                            </div>
+                          )}
+                        </Draggable>
+                      ))}
+                      {provided.placeholder}
+                    </div>
+                  )}
+                </Droppable>
+              </DragDropContext>
+
+              {/* Editing Step */}
+              {editIndex !== null && (
+                <div className="flex gap-2 mt-4">
+                  <input
+                    type="text"
+                    value={editPas}
+                    onChange={(e) => setEditPas(e.target.value)}
+                    onKeyDown={handleKeyDown} // Add this event handler
+                    className="w-full p-2 border border-gray-400 rounded-md"
+                  />
+                  <button
+                    onClick={handleUpdatePas}
+                    className="bg-blue-900 text-white p-2 rounded-md"
+                  >
+                    Update
+                  </button>
+                </div>
+              )}
             </div>
 
             <div className="rezultat flex flex-col gap-2 mt-4">

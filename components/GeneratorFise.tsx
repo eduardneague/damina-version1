@@ -483,6 +483,7 @@ const raportCasetaStyles = StyleSheet.create({
     gap: "10px",
   },
   pageBody: {
+    fontFamily: "Times-Roman",
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
